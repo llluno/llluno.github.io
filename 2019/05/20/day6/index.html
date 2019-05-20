@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+    <meta name="keywords" content="山林,小生,uno,mtman,山林小生">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>迭代器 · llluno</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon-1.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mtman&#39;s note.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">迭代器</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mtman's note.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            迭代器
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.2k</span>阅读时长: <span class="post-count reading-time">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/05/20</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><h2 id="1-可迭代对象"><a href="#1-可迭代对象" class="headerlink" title="1. 可迭代对象"></a>1. 可迭代对象</h2><p>我们知道可以对list、tuple、str等类型的数据使用for…in…的循环语法从其中依次拿到数据进行使用，我们把这样的过程称为遍历，也叫<strong>迭代</strong>。迭代是访问集合元素的一种常用方式</p>
+<h4 id="1-1-测试常用数据类型的可迭代性"><a href="#1-1-测试常用数据类型的可迭代性" class="headerlink" title="1.1 测试常用数据类型的可迭代性"></a>1.1 测试常用数据类型的可迭代性</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试列表</span></span><br><span class="line"><span class="keyword">for</span> temp <span class="keyword">in</span> [<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>]:</span><br><span class="line">    print(temp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试元组</span></span><br><span class="line"><span class="keyword">for</span> temp <span class="keyword">in</span> (<span class="string">"A"</span>,<span class="string">"B"</span>,<span class="string">"C"</span>):</span><br><span class="line">    print(temp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试字典</span></span><br><span class="line">person_info=&#123;<span class="string">"name"</span>:<span class="string">"xiaowang"</span>,<span class="string">"age"</span>:<span class="number">20</span>&#125;</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span>  person_info.items():</span><br><span class="line">    print(item)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试字符串</span></span><br><span class="line"><span class="keyword">for</span> temp <span class="keyword">in</span> <span class="string">"xingdao"</span>:</span><br><span class="line">    print(temp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试整数</span></span><br><span class="line"><span class="keyword">for</span> temp <span class="keyword">in</span> <span class="number">100</span>:</span><br><span class="line">    print(temp)</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">    <span class="number">11</span></span><br><span class="line">    <span class="number">22</span></span><br><span class="line">    <span class="number">33</span></span><br><span class="line">    A</span><br><span class="line">    B</span><br><span class="line">    C</span><br><span class="line">    (<span class="string">'age'</span>, <span class="number">20</span>)</span><br><span class="line">    (<span class="string">'name'</span>, <span class="string">'xiaowang'</span>)</span><br><span class="line">    x</span><br><span class="line">    i</span><br><span class="line">    n</span><br><span class="line">    g</span><br><span class="line">    d</span><br><span class="line">    a</span><br><span class="line">    o</span><br><span class="line">    Traceback (most recent call last):</span><br><span class="line">      File <span class="string">"/home/python/Desktop/python高级/python_协程/01-测试可迭代对象.py"</span>, line <span class="number">21</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">        <span class="keyword">for</span> temp <span class="keyword">in</span> <span class="number">100</span>:</span><br><span class="line">    TypeError: <span class="string">'int'</span> object <span class="keyword">is</span> <span class="keyword">not</span> iterable</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># int整型不是iterable，即int整型不是可以迭代的</span></span><br></pre></td></tr></table></figure>
+<p><strong>小结：</strong></p>
+<ul>
+<li>列表、元组、字符串、字典都是可迭代的，而整数、浮点数、布尔数都是不可迭代的</li>
+<li>我们把可以通过for…in…这类语句迭代读取一条数据供我们使用的对象称之为可迭代对象（Iterable）</li>
+</ul>
+<h4 id="1-2-通过isinstance-判断一个对象是否可以迭代"><a href="#1-2-通过isinstance-判断一个对象是否可以迭代" class="headerlink" title="1.2 通过isinstance()判断一个对象是否可以迭代"></a>1.2 通过isinstance()判断一个对象是否可以迭代</h4><blockquote>
+<p>可以使用 isinstance() 判断一个对象是否是 Iterable 对象：</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Iterable</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断列表</span></span><br><span class="line">print(isinstance([], Iterable))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断元组</span></span><br><span class="line">print(isinstance((), Iterable))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断字典</span></span><br><span class="line">print(isinstance(&#123;&#125;, Iterable))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断字符串</span></span><br><span class="line">print(isinstance(<span class="string">""</span>, Iterable))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断整数</span></span><br><span class="line">print(isinstance(<span class="number">100</span>, Iterable))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断boolean</span></span><br><span class="line">print(isinstance(<span class="literal">False</span>, Iterable))</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-自定义一个能容纳数据的类，测试该类的可迭代性"><a href="#1-3-自定义一个能容纳数据的类，测试该类的可迭代性" class="headerlink" title="1.3 自定义一个能容纳数据的类，测试该类的可迭代性"></a>1.3 自定义一个能容纳数据的类，测试该类的可迭代性</h3><blockquote>
+<p>自定义一个容器MyClassmate用来存放数据，可以通过add方法向其中添加数据</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import collections</span><br><span class="line"></span><br><span class="line">class MyClassmate(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.names = []</span><br><span class="line"></span><br><span class="line">    def add(self, name):</span><br><span class="line">        self.names.append(name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 创建 MyClassmate对象</span><br><span class="line">my_classmate = MyClassmate()</span><br><span class="line">my_classmate.add(&quot;小王&quot;)</span><br><span class="line">my_classmate.add(&quot;小李&quot;)</span><br><span class="line">my_classmate.add(&quot;小张&quot;)</span><br><span class="line"></span><br><span class="line"># 判断MyClassmate是否为可迭代对象</span><br><span class="line">print(&quot;是否为可迭代对象：&quot;,isinstance(my_classmate, collections.Iterable))</span><br><span class="line"></span><br><span class="line"># 迭代数据</span><br><span class="line">for temp in my_classmate:</span><br><span class="line">    print(temp)</span><br><span class="line"></span><br><span class="line">运行结果：</span><br><span class="line">是否为可迭代对象： False</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    for temp in my_classmate:</span><br><span class="line">TypeError: &apos;MyClassmate&apos; object is not iterable</span><br><span class="line"></span><br><span class="line"># MyClassmate容器的对象也是不能迭代的</span><br></pre></td></tr></table></figure>
+<p><strong>随便封装了一个可以存放多条数据的类型也是不能迭代的</strong></p>
+<h2 id="2-可迭代对象的本质"><a href="#2-可迭代对象的本质" class="headerlink" title="2. 可迭代对象的本质"></a>2. 可迭代对象的本质</h2><p>我们分析对可迭代对象进行迭代使用的过程，发现每迭代一次（即在for…in…中每循环一次）都会返回对象中的下一条数据，一直向后读取数据直到迭代了所有数据后结束。那么，在这个过程中就应该有一个“人”去记录每次访问到了第几条数据，以便每次迭代都可以返回下一条数据。我们把这个能帮助我们进行数据迭代的“人”称为<strong>迭代器(Iterator)</strong>。</p>
+<p>可迭代对象的本质就是提供一个这样的中间“人”即迭代器帮助我们对其进行迭代遍历使用。</p>
+<p>可迭代对象通过<code>__iter__</code>方法向我们提供一个迭代器，在迭代一个可迭代对象的时候，实际上就是先获取该对象提供的一个迭代器，然后通过这个迭代器来依次获取对象中的每一个数据.</p>
+<p><strong>小结：</strong></p>
+<ol>
+<li>可迭代对象的本质就是提供一个这样的中间“人”即迭代器帮助我们对其进行迭代遍历使用</li>
+<li>可迭代对象是一个具备了<code>__iter__</code>方法的对象，通过<code>__iter__</code>方法获取可迭代对象的迭代器</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Iterable</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClassmate</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.names = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        self.names.append(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""空实现该方法"""</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 MyClassmate对象</span></span><br><span class="line">my_classmate = MyClassmate()</span><br><span class="line">my_classmate.add(<span class="string">"小王"</span>)</span><br><span class="line">my_classmate.add(<span class="string">"小李"</span>)</span><br><span class="line">my_classmate.add(<span class="string">"小张"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断MyClassmate是否为可迭代对象</span></span><br><span class="line">print(isinstance(my_classmate, Iterable))</span><br><span class="line"></span><br><span class="line">运行结果：</span><br><span class="line">是否为可迭代对象： <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这回测试发现添加了__iter__方法的my_classmate对象已经是一个可迭代对象了。</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-再认识iter-函数与next-函数"><a href="#3-再认识iter-函数与next-函数" class="headerlink" title="3. 再认识iter()函数与next()函数"></a>3. 再认识iter()函数与next()函数</h2><blockquote>
+<p>list、tuple等都是可迭代对象，我们可以通过iter()函数获取这些可迭代对象的迭代器。然后我们可以对获取到的迭代器不断使用next()函数来获取下一条数据。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">li = [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>, <span class="number">44</span>, <span class="number">55</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过iter() 取得可迭代对象的迭代器</span></span><br><span class="line">iterator = iter(li)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过next()函数取得iterator迭代器指向的下一个值</span></span><br><span class="line">print(next(iterator))</span><br><span class="line">print(next(iterator))</span><br><span class="line">print(next(iterator))</span><br><span class="line">print(next(iterator))</span><br><span class="line">print(next(iterator))</span><br><span class="line">print(next(iterator))</span><br></pre></td></tr></table></figure>
+<p><strong>小结:</strong></p>
+<ol>
+<li>iter(iterable)函数是把可迭代对象的迭代器取出来，内部是调用可迭代对象的<code>__iter__</code>方法，来取得迭代器的</li>
+<li>next(iterator)函数是通过迭代器取得下一个位置的值，内部是调用迭代器对象的<code>__next__</code>方法，来取得下一个位置的值</li>
+</ol>
+<p><strong>注意:</strong> 当我们已经迭代完最后一个数据之后，再次调用next()函数会抛出StopIteration的异常，来告诉我们所有数据都已迭代完成，不用再执行next()函数了。</p>
+<h2 id="4-迭代器Iterator"><a href="#4-迭代器Iterator" class="headerlink" title="4. 迭代器Iterator"></a>4. 迭代器Iterator</h2><p>通过上面的分析，我们已经知道，迭代器是用来帮助我们记录每次迭代访问到的位置，当我们对迭代器使用next()函数的时候，迭代器会向我们返回它所记录位置的下一个位置的数据。实际上，在使用next()函数的时候，调用的就是迭代器对象的<code>__next__</code>方法。</p>
+<p><strong>所以，我们要想构造一个迭代器，就要实现它的<strong>next</strong>方法</strong>。但这还不够，python要求迭代器本身也是可迭代的，所以我们还要为迭代器实现<code>__iter__</code>方法，而<code>__iter__</code>方法要返回一个迭代器，迭代器自身正是一个迭代器，所以迭代器的<code>__iter__</code>方法返回自身即可。</p>
+<p><strong>结论:</strong> <strong>一个实现了<strong>iter</strong>方法和<strong>next</strong>方法的对象，就是迭代器，迭代器同时也是一个可迭代对象</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClassmate</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 声明一个列表</span></span><br><span class="line">        self.names = []</span><br><span class="line">        <span class="comment"># 记录迭代器迭代的位置， 默认是0 ，即从起始位置开始</span></span><br><span class="line">        self.current = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        self.names.append(name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""通过该方法取得迭代器对象"""</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""取得下一个迭代的值"""</span></span><br><span class="line">        <span class="keyword">if</span> self.current &lt; len(self.names):</span><br><span class="line">            name = self.names[self.current]</span><br><span class="line">            self.current += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> name</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建MyClassmate实例</span></span><br><span class="line">my_classmate = MyClassmate()</span><br><span class="line">my_classmate.add(<span class="string">"小王"</span>)</span><br><span class="line">my_classmate.add(<span class="string">"小李"</span>)</span><br><span class="line">my_classmate.add(<span class="string">"小张"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试MyList是不是可迭代对象</span></span><br><span class="line">print(isinstance(my_classmate, collections.Iterable))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数据</span></span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> my_classmate:</span><br><span class="line">    print(name)</span><br></pre></td></tr></table></figure>
+<h2 id="5-for…in…循环的本质"><a href="#5-for…in…循环的本质" class="headerlink" title="5. for…in…循环的本质"></a>5. for…in…循环的本质</h2><p>for <strong>item</strong> in <strong>Iterable</strong> 循环的本质就是先通过iter()函数获取可迭代对象Iterable的迭代器，然后对获取到的迭代器不断调用next()方法来获取下一个值并将其赋值给item，当遇到StopIteration的异常后循环结束。</p>
+<h2 id="6-迭代器的应用场景"><a href="#6-迭代器的应用场景" class="headerlink" title="6. 迭代器的应用场景"></a>6. 迭代器的应用场景</h2><p>我们发现迭代器最核心的功能就是可以通过next()函数的调用来返回下一个数据值。如果每次返回的数据值不是在一个已有的数据集合中读取的，而是通过程序按照一定的规律计算生成的，那么也就意味着可以不用再依赖一个已有的数据集合，也就是说不用再将所有要迭代的数据都一次性缓存下来供后续依次读取，这样可以节省大量的存储（内存）空间。</p>
+<p>举个例子，比如，数学中有个著名的斐波拉契数列（Fibonacci），数列中第一个数为0，第二个数为1，其后的每一个数都可由前两个数相加得到：</p>
+<p>0, 1, 1, 2, 3, 5, 8, 13, 21, 34, …</p>
+<p>现在我们想要通过for…in…循环来遍历迭代斐波那契数列中的前n个数。那么这个斐波那契数列我们就可以用迭代器来实现，每次迭代都通过数学计算来生成下一个数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FibIterator</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""斐波那契数列迭代器"""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n)</span>:</span></span><br><span class="line">        <span class="comment"># 记录生成fibonacci的数列的个数</span></span><br><span class="line">        self.n = n</span><br><span class="line">        <span class="comment"># 记录当前遍历的下标</span></span><br><span class="line">        self.current_index = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 记录fibonacci数列前面的两个值</span></span><br><span class="line">        self.num1 = <span class="number">0</span></span><br><span class="line">        self.num2 = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""被next()函数调用来获取下一个数"""</span></span><br><span class="line">        <span class="keyword">if</span> self.current_index &lt; self.n:</span><br><span class="line">            num = self.num1</span><br><span class="line">            self.num1, self.num2 = self.num2, self.num1 + self.num2</span><br><span class="line">            self.current_index += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> num</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""迭代器的__iter__返回自身即可"""</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    fib = FibIterator(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> fib:</span><br><span class="line">        print(<span class="string">"  "</span>, num, end=<span class="string">""</span>)</span><br></pre></td></tr></table></figure>
+<p>运行结果: 0 1 1 2 3 5 8 13 21 34</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/05/20/day5/" title="装饰器">
+                    <div class="prevTitle">装饰器</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQxMS8xNzk1OA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:web@mtman.site" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/qrcode.jpg">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//weibo.com/2261202055" class="iconfont-archer weibo" target="_blank" title="weibo"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//www.instagram.com/_ununo/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/1418144" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#迭代器"><span class="toc-number">1.</span> <span class="toc-text">迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-可迭代对象"><span class="toc-number">1.1.</span> <span class="toc-text">1. 可迭代对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-测试常用数据类型的可迭代性"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">1.1 测试常用数据类型的可迭代性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-通过isinstance-判断一个对象是否可以迭代"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">1.2 通过isinstance()判断一个对象是否可以迭代</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-自定义一个能容纳数据的类，测试该类的可迭代性"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.3 自定义一个能容纳数据的类，测试该类的可迭代性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-可迭代对象的本质"><span class="toc-number">1.2.</span> <span class="toc-text">2. 可迭代对象的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-再认识iter-函数与next-函数"><span class="toc-number">1.3.</span> <span class="toc-text">3. 再认识iter()函数与next()函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-迭代器Iterator"><span class="toc-number">1.4.</span> <span class="toc-text">4. 迭代器Iterator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-for…in…循环的本质"><span class="toc-number">1.5.</span> <span class="toc-text">5. for…in…循环的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-迭代器的应用场景"><span class="toc-number">1.6.</span> <span class="toc-text">6. 迭代器的应用场景</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 6
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day2/">python函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day4/">生成器</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+    <meta name="keywords" content="山林,小生,uno,mtman,山林小生">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>python的基础安装与数据类型 · llluno</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon-1.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mtman&#39;s note.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">python的基础安装与数据类型</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mtman's note.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            python的基础安装与数据类型
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.5k</span>阅读时长: <span class="post-count reading-time">5 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/05/20</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="python-安装"><a href="#python-安装" class="headerlink" title="python 安装"></a>python 安装</h1><p>网站：python.org<br>安装时需要add to PATH</p>
+<h1 id="python-简单函数"><a href="#python-简单函数" class="headerlink" title="python 简单函数"></a>python 简单函数</h1><h2 id="类型函数"><a href="#类型函数" class="headerlink" title="类型函数"></a>类型函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type()</span><br></pre></td></tr></table></figure>
+<p>类型函数，得知输入的数值类型</p>
+<h2 id="强制转换函数"><a href="#强制转换函数" class="headerlink" title="强制转换函数"></a>强制转换函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int()</span><br></pre></td></tr></table></figure>
+<p>强制转换成整型，里面可以加单引号也可以不加<br>根据此可以有<code>float()</code>等等</p>
+<h2 id="格式化函数"><a href="#格式化函数" class="headerlink" title="格式化函数"></a>格式化函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"&#123;&#125;,&#123;&#125;"</span>.format(<span class="string">'Hello'</span>,<span class="string">'World'</span>)</span><br></pre></td></tr></table></figure>
+<p>这会输出<code>Hello,World</code>，如果输入为<code>&quot;{0},{1}&quot;.format(&#39;Hello&#39;,&#39;World&#39;)</code>也会输出为<code>Hello,World</code>。第一次是按照出现顺序自动填入，而第二次为手动填入。当然还可以<code>&quot;{w1},{w2}&quot;.format(w1 = &#39;Hello&#39;,w2 = &#39;World&#39;)</code></p>
+<h2 id="sep-end"><a href="#sep-end" class="headerlink" title="sep,end"></a>sep,end</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">w1 = <span class="string">'World'</span></span><br><span class="line">print(<span class="string">'Hello'</span>,w1,sep = <span class="string">' '</span>)</span><br><span class="line">print(<span class="string">'Hello'</span>,end = w1)</span><br></pre></td></tr></table></figure>
+<p>这会输出<code>Hello World</code>和<code>HelloWorld</code>，这是<code>print</code>的内置函数，<code>sep</code>用来分割，<code>end</code>接的是结尾的输出</p>
+<h1 id="概念知识"><a href="#概念知识" class="headerlink" title="概念知识"></a>概念知识</h1><h2 id="数组（list）"><a href="#数组（list）" class="headerlink" title="数组（list）"></a>数组（list）</h2><p>数组使用中括号<code>[]</code>来表示</p>
+<h3 id="数组函数"><a href="#数组函数" class="headerlink" title="数组函数"></a>数组函数</h3><p><code>append()</code>  用来在数组后面添加一个数字或者添加一个数组或者字典。<br><code>extend()</code>  用来在数组后面添加一组或一个数字<br><code>pop()</code>     数组弹出最后一个元素，即栈的pop<br><code>remove()</code>  用来移除第一个出现的指定数字<br><code>reverse()</code> 用来数组反向<br><code>sort()</code>    用来数组排序<br><code>count()</code>   统计某个元素在列表中出现的次数  </p>
+<h2 id="集合（set）"><a href="#集合（set）" class="headerlink" title="集合（set）"></a>集合（set）</h2><p>集合内容无序、但元素不重复。使用大括号<code>{}</code>，无序的意思是不从0开始的栈  </p>
+<h3 id="集合函数"><a href="#集合函数" class="headerlink" title="集合函数"></a>集合函数</h3><p><code>add()</code>                         可以往集合里面添加元素<br><code>clear()</code>                        清除集合内所有元素<br><code>copy()</code>                        复制整个集合<br><code>difference()</code>                    返回一个集合，是A中有的但B中没有的，A-B<br><code>difference_update()</code>            根据上面<code>difference()</code>，将A更新为返回的集合<br><code>discard()</code>                        删除集合中的一个元素，不管这个元素是否存在于集合之中<br><code>intersection()</code>                数学意义上的交集，返回交集的集合<br><code>intersection_update()</code>            根据<code>intersection()</code>，将A更新为返回的交集<br><code>isdisjoint()</code>                    如何两个集合没有交集，则返回<code>True</code><br><code>issubset()</code>                    如果另一个集合包含此集合则返回<code>True</code><br><code>issuperset()</code>                    如果这个集合包含另一个集合则返回<code>True</code><br><code>pop()</code>                            删除这个集合的第一个元素，如果集合为空则报错<code>KeyError</code><br><code>remove()</code>                        删除这个集合中的指定元素，如果这个元素不存在则报错<code>KeyError</code><br><code>symmetric_difference()</code>        数学意义为<code>A并B-A交B</code>,返回这样的集合<br><code>symmetric_difference_update()</code>    根据<code>symmetric_difference()</code>，将A集合改为此函数返回集合<br><code>union()</code>                        数学意义为<code>A并B</code>，返回这个集合<br><code>update()</code>                        将此集合更新为<code>A并B</code></p>
+<h2 id="字典（dict）"><a href="#字典（dict）" class="headerlink" title="字典（dict）"></a>字典（dict）</h2><p>字典用来储存两两对应的<code>Key-Value</code>也是使用大括号<code>{}</code>，在查看对应<code>Key</code>的<code>Value</code>时使用中括号<code>[]</code>，比如 <code>passwords = {&#39;Andy&#39;:123456 ,&#39;John&#39; : 654321}</code><br><code>Andy</code> 对应着 <code>123456</code></p>
+<h3 id="字典函数"><a href="#字典函数" class="headerlink" title="字典函数"></a>字典函数</h3><p><code>clear()</code>                删除字典中所有的元素<br><code>copy()</code>                返回字典为此字典，可用于给新的字典快速负值<br><code>fromkeys(seq[, v])</code>    返回一个新的字典，返回的字典中<code>Key</code>为<code>seq</code>中的<code>Key</code>，对应的<code>Value</code>为<code>v</code>中的值，默认为空。其中<code>seq</code>表示已有的字典名，<code>v</code>可以为空，也可以为一个元素，也可以为一个数组，当数组变动时，字典也跟随着变动。<br><code>get(key[,d])</code>            返回指定<code>Key</code>的值，若<code>Key</code>不存在，则返回<code>d</code>，默认为<code>None</code><br><code>items()</code>                返回这个字典里面的所有元素<br><code>keys()</code>                返回这个字典里所有的<code>Key</code><br><code>pop(key[,d])</code>            移除字典中对应的<code>Key</code>的元素，并返回其对应的<code>Value</code>，如果未找到<code>Key</code>，则返回<code>d</code>，若都没有，则报错<code>KeyError</code><br><code>popitem()</code>                随机返回并删除字典中的一对键和值。如果字典为空，则报错<code>KeyError</code><br><code>setdefault(key[,d])</code>    和<code>get()</code>类似, 但如果键不存在于字典中，将会添加键并将值设为<code>default</code><br><code>update([dict2])</code>        把字典<code>dict2</code>的键/值对更新到<code>dict</code>里<br><code>values()</code>                以列表返回字典中的所有值</p>
+<h2 id="元组（tuple）"><a href="#元组（tuple）" class="headerlink" title="元组（tuple）"></a>元组（tuple）</h2><p>tuple与list类似，是有序的，但是tuple里的元素不能修改。创建时使用<code>()</code></p>
+<h3 id="元组函数"><a href="#元组函数" class="headerlink" title="元组函数"></a>元组函数</h3><p><code>count(x)</code>                返回对应x元素的个数<br><code>index(x)</code>                返回对应x元素的位置<br><code>all()</code>                    如果元组内元素都为真则返回真<br><code>any()</code>                    如果元组内任意元素为真则返回真<br><code>enumerate(tuple，d)</code>    将元组转换为enumerate类型，若d为空，则默认从0开始依次对元组内的元素标记，d有值则从值的位置开始<br><code>len()</code>                    计算元组元素个数<br><code>max()</code>                    返回元组中元素最大值<br><code>min()</code>                    返回元组中元素最小值<br><code>sorted()</code>                返回一个排好序的元组，但元组本身并没有排序<br><code>sum()</code>                    返回元组内所有元素之和<br><code>tuple()</code>                将列表转换为元组  </p>
+<h2 id="比较运算"><a href="#比较运算" class="headerlink" title="比较运算"></a>比较运算</h2><p><code>==,!=</code>表示两个变量是否相同或不同，<code>is,is not</code>表示两个变量的内存是否相同</p>
+<h2 id="索引切片"><a href="#索引切片" class="headerlink" title="索引切片"></a>索引切片</h2><p><img src="http://www.runoob.com/wp-content/uploads/2013/11/list_slicing1.png" alt></p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="变量名的规则"><a href="#变量名的规则" class="headerlink" title="变量名的规则"></a>变量名的规则</h3><p>1、合理的变量名而不是单一的字母<br>2、驼峰命名法<br>3、声明的变量大写<br>4、不要在变量名中使用符号<br>5、不要以数字开头</p>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h3><p>+       加   —- 两个对象相加    <code>a + b</code> 输出结果 30<br>-      减   —- 得到负数或是一个数减去另一个数    <code>a - b</code> 输出结果 -10<br>*      乘   —- 两个数相乘或是返回一个被重复若干次的字符串    <code>a * b</code> 输出结果 200<br>/        除   —- x除以y    <code>b / a</code> 输出结果 2<br>%        取模 —- 返回除法的余数    <code>b % a</code> 输出结果 0<br><strong>        幂   —- 返回x的y次幂    `a</strong>b<code>为10的20次方， 输出结果 100000000000000000000  
+//      取整除 ---- 返回商的整数部分（向下取整）</code>9//2<code>=</code>4<code>,</code>-9//2<code>=</code>-5`</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>=    简单的赋值运算符    c = a + b 将 a + b 的运算结果赋值为 c<br>+=    加法赋值运算符    c += a 等效于 c = c + a<br>-=    减法赋值运算符    c -= a 等效于 c = c - a<br><em>=    乘法赋值运算符    c </em>= a 等效于 c = c * a<br>/=    除法赋值运算符    c /= a 等效于 c = c / a<br>%=    取模赋值运算符    c %= a 等效于 c = c % a<br><strong>=    幂赋值运算符        c </strong>= a 等效于 c = c ** a<br>//=    取整除赋值运算符    c //= a 等效于 c = c // a</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/05/20/day2/" title="python函数">
+                    <div class="nextTitle">python函数</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQxMS8xNzk1OA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:web@mtman.site" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/qrcode.jpg">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//weibo.com/2261202055" class="iconfont-archer weibo" target="_blank" title="weibo"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//www.instagram.com/_ununo/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/1418144" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python-安装"><span class="toc-number">1.</span> <span class="toc-text">python 安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#python-简单函数"><span class="toc-number">2.</span> <span class="toc-text">python 简单函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#类型函数"><span class="toc-number">2.1.</span> <span class="toc-text">类型函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#强制转换函数"><span class="toc-number">2.2.</span> <span class="toc-text">强制转换函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化函数"><span class="toc-number">2.3.</span> <span class="toc-text">格式化函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sep-end"><span class="toc-number">2.4.</span> <span class="toc-text">sep,end</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#概念知识"><span class="toc-number">3.</span> <span class="toc-text">概念知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数组（list）"><span class="toc-number">3.1.</span> <span class="toc-text">数组（list）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数组函数"><span class="toc-number">3.1.1.</span> <span class="toc-text">数组函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集合（set）"><span class="toc-number">3.2.</span> <span class="toc-text">集合（set）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#集合函数"><span class="toc-number">3.2.1.</span> <span class="toc-text">集合函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字典（dict）"><span class="toc-number">3.3.</span> <span class="toc-text">字典（dict）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字典函数"><span class="toc-number">3.3.1.</span> <span class="toc-text">字典函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#元组（tuple）"><span class="toc-number">3.4.</span> <span class="toc-text">元组（tuple）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#元组函数"><span class="toc-number">3.4.1.</span> <span class="toc-text">元组函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#比较运算"><span class="toc-number">3.5.</span> <span class="toc-text">比较运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引切片"><span class="toc-number">3.6.</span> <span class="toc-text">索引切片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">3.7.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量名的规则"><span class="toc-number">3.7.1.</span> <span class="toc-text">变量名的规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运算符"><span class="toc-number">3.8.</span> <span class="toc-text">运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算术运算符"><span class="toc-number">3.8.1.</span> <span class="toc-text">算术运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#赋值运算符"><span class="toc-number">3.8.2.</span> <span class="toc-text">赋值运算符</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 6
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day2/">python函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day4/">生成器</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
