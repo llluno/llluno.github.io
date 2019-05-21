@@ -22,7 +22,7 @@
     <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>python的基础安装与数据类型 · llluno</title>
+    <title>闭包 · llluno</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Mtman&#39;s note.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">python的基础安装与数据类型</a>
+                <a href="#" class="post-name">闭包</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            python的基础安装与数据类型
+            闭包
             <!-- 404 -->
             
         </h1>
@@ -272,12 +272,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">1.5k</span>阅读时长: <span class="post-count reading-time">5 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.1k</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2019/05/20</span>
+                    <span class="post-intro-time">2019/05/21</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,29 +401,39 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="python-安装"><a href="#python-安装" class="headerlink" title="python 安装"></a>python 安装</h1><p>网站：python.org<br>安装时需要add to PATH</p>
-<h1 id="python-简单函数"><a href="#python-简单函数" class="headerlink" title="python 简单函数"></a>python 简单函数</h1><h2 id="类型函数"><a href="#类型函数" class="headerlink" title="类型函数"></a>类型函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type()</span><br></pre></td></tr></table></figure>
-<p>类型函数，得知输入的数值类型</p>
-<h2 id="强制转换函数"><a href="#强制转换函数" class="headerlink" title="强制转换函数"></a>强制转换函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int()</span><br></pre></td></tr></table></figure>
-<p>强制转换成整型，里面可以加单引号也可以不加<br>根据此可以有<code>float()</code>等等</p>
-<h2 id="格式化函数"><a href="#格式化函数" class="headerlink" title="格式化函数"></a>格式化函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"&#123;&#125;,&#123;&#125;"</span>.format(<span class="string">'Hello'</span>,<span class="string">'World'</span>)</span><br></pre></td></tr></table></figure>
-<p>这会输出<code>Hello,World</code>，如果输入为<code>&quot;{0},{1}&quot;.format(&#39;Hello&#39;,&#39;World&#39;)</code>也会输出为<code>Hello,World</code>。第一次是按照出现顺序自动填入，而第二次为手动填入。当然还可以<code>&quot;{w1},{w2}&quot;.format(w1 = &#39;Hello&#39;,w2 = &#39;World&#39;)</code></p>
-<h2 id="sep-end"><a href="#sep-end" class="headerlink" title="sep,end"></a>sep,end</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">w1 = <span class="string">'World'</span></span><br><span class="line">print(<span class="string">'Hello'</span>,w1,sep = <span class="string">' '</span>)</span><br><span class="line">print(<span class="string">'Hello'</span>,end = w1)</span><br></pre></td></tr></table></figure>
-<p>这会输出<code>Hello World</code>和<code>HelloWorld</code>，这是<code>print</code>的内置函数，<code>sep</code>用来分割，<code>end</code>接的是结尾的输出</p>
-<h1 id="概念知识"><a href="#概念知识" class="headerlink" title="概念知识"></a>概念知识</h1><h2 id="数组（list）"><a href="#数组（list）" class="headerlink" title="数组（list）"></a>数组（list）</h2><p>数组使用中括号<code>[]</code>来表示</p>
-<h3 id="数组函数"><a href="#数组函数" class="headerlink" title="数组函数"></a>数组函数</h3><p><code>append()</code>  用来在数组后面添加一个数字或者添加一个数组或者字典。<br><code>extend()</code>  用来在数组后面添加一组或一个数字<br><code>pop()</code>     数组弹出最后一个元素，即栈的pop<br><code>remove()</code>  用来移除第一个出现的指定数字<br><code>reverse()</code> 用来数组反向<br><code>sort()</code>    用来数组排序<br><code>count()</code>   统计某个元素在列表中出现的次数  </p>
-<h2 id="集合（set）"><a href="#集合（set）" class="headerlink" title="集合（set）"></a>集合（set）</h2><p>集合内容无序、但元素不重复。使用大括号<code>{}</code>，无序的意思是不从0开始的栈  </p>
-<h3 id="集合函数"><a href="#集合函数" class="headerlink" title="集合函数"></a>集合函数</h3><p><code>add()</code>                         可以往集合里面添加元素<br><code>clear()</code>                        清除集合内所有元素<br><code>copy()</code>                        复制整个集合<br><code>difference()</code>                    返回一个集合，是A中有的但B中没有的，A-B<br><code>difference_update()</code>            根据上面<code>difference()</code>，将A更新为返回的集合<br><code>discard()</code>                        删除集合中的一个元素，不管这个元素是否存在于集合之中<br><code>intersection()</code>                数学意义上的交集，返回交集的集合<br><code>intersection_update()</code>            根据<code>intersection()</code>，将A更新为返回的交集<br><code>isdisjoint()</code>                    如何两个集合没有交集，则返回<code>True</code><br><code>issubset()</code>                    如果另一个集合包含此集合则返回<code>True</code><br><code>issuperset()</code>                    如果这个集合包含另一个集合则返回<code>True</code><br><code>pop()</code>                            删除这个集合的第一个元素，如果集合为空则报错<code>KeyError</code><br><code>remove()</code>                        删除这个集合中的指定元素，如果这个元素不存在则报错<code>KeyError</code><br><code>symmetric_difference()</code>        数学意义为<code>A并B-A交B</code>,返回这样的集合<br><code>symmetric_difference_update()</code>    根据<code>symmetric_difference()</code>，将A集合改为此函数返回集合<br><code>union()</code>                        数学意义为<code>A并B</code>，返回这个集合<br><code>update()</code>                        将此集合更新为<code>A并B</code></p>
-<h2 id="字典（dict）"><a href="#字典（dict）" class="headerlink" title="字典（dict）"></a>字典（dict）</h2><p>字典用来储存两两对应的<code>Key-Value</code>也是使用大括号<code>{}</code>，在查看对应<code>Key</code>的<code>Value</code>时使用中括号<code>[]</code>，比如 <code>passwords = {&#39;Andy&#39;:123456 ,&#39;John&#39; : 654321}</code><br><code>Andy</code> 对应着 <code>123456</code></p>
-<h3 id="字典函数"><a href="#字典函数" class="headerlink" title="字典函数"></a>字典函数</h3><p><code>clear()</code>                删除字典中所有的元素<br><code>copy()</code>                返回字典为此字典，可用于给新的字典快速负值<br><code>fromkeys(seq[, v])</code>    返回一个新的字典，返回的字典中<code>Key</code>为<code>seq</code>中的<code>Key</code>，对应的<code>Value</code>为<code>v</code>中的值，默认为空。其中<code>seq</code>表示已有的字典名，<code>v</code>可以为空，也可以为一个元素，也可以为一个数组，当数组变动时，字典也跟随着变动。<br><code>get(key[,d])</code>            返回指定<code>Key</code>的值，若<code>Key</code>不存在，则返回<code>d</code>，默认为<code>None</code><br><code>items()</code>                返回这个字典里面的所有元素<br><code>keys()</code>                返回这个字典里所有的<code>Key</code><br><code>pop(key[,d])</code>            移除字典中对应的<code>Key</code>的元素，并返回其对应的<code>Value</code>，如果未找到<code>Key</code>，则返回<code>d</code>，若都没有，则报错<code>KeyError</code><br><code>popitem()</code>                随机返回并删除字典中的一对键和值。如果字典为空，则报错<code>KeyError</code><br><code>setdefault(key[,d])</code>    和<code>get()</code>类似, 但如果键不存在于字典中，将会添加键并将值设为<code>default</code><br><code>update([dict2])</code>        把字典<code>dict2</code>的键/值对更新到<code>dict</code>里<br><code>values()</code>                以列表返回字典中的所有值</p>
-<h2 id="元组（tuple）"><a href="#元组（tuple）" class="headerlink" title="元组（tuple）"></a>元组（tuple）</h2><p>tuple与list类似，是有序的，但是tuple里的元素不能修改。创建时使用<code>()</code></p>
-<h3 id="元组函数"><a href="#元组函数" class="headerlink" title="元组函数"></a>元组函数</h3><p><code>count(x)</code>                返回对应x元素的个数<br><code>index(x)</code>                返回对应x元素的位置<br><code>all()</code>                    如果元组内元素都为真则返回真<br><code>any()</code>                    如果元组内任意元素为真则返回真<br><code>enumerate(tuple，d)</code>    将元组转换为enumerate类型，若d为空，则默认从0开始依次对元组内的元素标记，d有值则从值的位置开始<br><code>len()</code>                    计算元组元素个数<br><code>max()</code>                    返回元组中元素最大值<br><code>min()</code>                    返回元组中元素最小值<br><code>sorted()</code>                返回一个排好序的元组，但元组本身并没有排序<br><code>sum()</code>                    返回元组内所有元素之和<br><code>tuple()</code>                将列表转换为元组  </p>
-<h2 id="比较运算"><a href="#比较运算" class="headerlink" title="比较运算"></a>比较运算</h2><p><code>==,!=</code>表示两个变量是否相同或不同，<code>is,is not</code>表示两个变量的内存是否相同</p>
-<h2 id="索引切片"><a href="#索引切片" class="headerlink" title="索引切片"></a>索引切片</h2><p><img src="http://www.runoob.com/wp-content/uploads/2013/11/list_slicing1.png" alt></p>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="变量名的规则"><a href="#变量名的规则" class="headerlink" title="变量名的规则"></a>变量名的规则</h3><p>1、合理的变量名而不是单一的字母<br>2、驼峰命名法<br>3、声明的变量大写<br>4、不要在变量名中使用符号<br>5、不要以数字开头</p>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h3><p>+       加   —- 两个对象相加    <code>a + b</code> 输出结果 30<br>-      减   —- 得到负数或是一个数减去另一个数    <code>a - b</code> 输出结果 -10<br>*      乘   —- 两个数相乘或是返回一个被重复若干次的字符串    <code>a * b</code> 输出结果 200<br>/        除   —- x除以y    <code>b / a</code> 输出结果 2<br>%        取模 —- 返回除法的余数    <code>b % a</code> 输出结果 0<br><strong>        幂   —- 返回x的y次幂    `a</strong>b<code>为10的20次方， 输出结果 100000000000000000000  
-//      取整除 ---- 返回商的整数部分（向下取整）</code>9//2<code>=</code>4<code>,</code>-9//2<code>=</code>-5`</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>=    简单的赋值运算符    c = a + b 将 a + b 的运算结果赋值为 c<br>+=    加法赋值运算符    c += a 等效于 c = c + a<br>-=    减法赋值运算符    c -= a 等效于 c = c - a<br><em>=    乘法赋值运算符    c </em>= a 等效于 c = c * a<br>/=    除法赋值运算符    c /= a 等效于 c = c / a<br>%=    取模赋值运算符    c %= a 等效于 c = c % a<br><strong>=    幂赋值运算符        c </strong>= a 等效于 c = c ** a<br>//=    取整除赋值运算符    c //= a 等效于 c = c // a</p>
+        <h2 id="1-8-闭包"><a href="#1-8-闭包" class="headerlink" title="1.8 闭包"></a>1.8 闭包</h2><h3 id="1-8-1-闭包概述"><a href="#1-8-1-闭包概述" class="headerlink" title="1.8.1 闭包概述"></a>1.8.1 闭包概述</h3><p>闭包是指在一个函数中定义了一个另外一个函数，内函数里运用了外函数的临时变量，并且外函数的返回值是内函数的引用，这样就构成了一个闭包。 闭包的使用，可以隐藏内部函数的工作细节，只给外部使用者提供一个可以执行的内部函数的引用。</p>
+<h3 id="1-8-2-思考"><a href="#1-8-2-思考" class="headerlink" title="1.8.2 思考"></a>1.8.2 思考</h3><p>有一种叫做五步棋的游戏，在一个五行五列的网格上双方各持一色棋子，在棋子移动时，只能以横向或纵向的形式移动。</p>
+<p>如果实现游戏，如何能记录当前棋子移动的位置（也就是坐标）呢？</p>
+<h3 id="1-8-3-技术点回顾"><a href="#1-8-3-技术点回顾" class="headerlink" title="1.8.3 技术点回顾"></a>1.8.3 技术点回顾</h3><p>在使用函数时，函数可以传递参数，函数也可以返回数据。</p>
+<p>在传递和返回数据时，一般是传递返回的固定数据和代码执行的结果。</p>
+<p>在Pyhton中，函数也是一个对象，在函数操作中，函数对象也可以当成一个参数或一个返回值进行返回。</p>
+<p>当程序内或程序外拿到参数的引用后就可以直接使用这个函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'show run'</span>)</span><br><span class="line"></span><br><span class="line">show()</span><br><span class="line">func = show</span><br><span class="line">func()</span><br></pre></td></tr></table></figure>
+<p>程序执行结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show run</span><br><span class="line">show run</span><br></pre></td></tr></table></figure>
+<h3 id="1-8-4-闭包"><a href="#1-8-4-闭包" class="headerlink" title="1.8.4 闭包"></a>1.8.4 闭包</h3><p>利用函数可以被传递和返回的特性，在开发过程中，可以隐藏更多的实现细节。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">1</span>   <span class="comment"># 全局变量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">()</span>:</span> <span class="comment"># 公有函数</span></span><br><span class="line">    print(<span class="string">'show: '</span>,n)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callFunc</span><span class="params">(func)</span>:</span> <span class="comment">#公有函数</span></span><br><span class="line">    <span class="keyword">return</span> func</span><br><span class="line"></span><br><span class="line">s = callFunc(show)  <span class="comment"># 函数执行</span></span><br><span class="line">s()</span><br><span class="line">show()</span><br></pre></td></tr></table></figure>
+<p>在这段代码中，在实际开发中并没有实际意义，只是简单示意了函数可以被当做参数和返回值使用。</p>
+<p>但是这段代码并不完美</p>
+<p>第一，尽量不要使用全局变量，因为全局变量会破坏程序的封装性。</p>
+<p>第二，如果 show 函数不想被 callFunc 以外的函数进行访问时，是无法控制的。</p>
+<p>所以可以改进如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callFunc</span><span class="params">()</span>:</span></span><br><span class="line">    n = <span class="number">1</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'show: '</span>, n)</span><br><span class="line">    <span class="keyword">return</span> show</span><br><span class="line"></span><br><span class="line">s = callFunc()</span><br><span class="line">s()</span><br><span class="line"><span class="comment"># show() 因为 show 函数定义在 callFunc 内部，所以外部不可见，不能使用</span></span><br></pre></td></tr></table></figure>
+<p>代码改进后，去掉了全局变量的使用。而且将 show 函数封装在了 callFunc 函数内部，使外部不可见，不能使用 show 函数，隐藏了实现细节</p>
+<p>程序在执行时，callFunc 函数返回了<strong>内部定义</strong>的 show 函数，并且 在 show 函数<strong>内部使用</strong>了外部函数的变量。</p>
+<p>在 show 函数返回时，保存了当前的执行环境，也就是会在 show 函数中使用的外部变量 n 。</p>
+<p>因为 n 是一个 callFunc 函数中的局部变量，正常情况下 callFunc 函数执行结束后，n 就会被释放。</p>
+<p>但是现在因为 callFunc 函数中返回了 show 函数，show 函数在外部还会再执行，所以程序会将 show 函数所需的执行环境保存下来。</p>
+<p>这种形式就是闭包。</p>
+<p><strong>利用闭包完成棋子的移动</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''闭包实现棋子移动'''</span></span><br><span class="line"><span class="comment"># 定义一个外部函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">outer</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 在外部函数中定义一个保存坐标的列表</span></span><br><span class="line">    position = [<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">    <span class="comment"># 定义一个内部函数，参数为移动方式和步长</span></span><br><span class="line">    <span class="comment"># 移动方式为列表 [x,y] x,y分别只能取 -1，0，1三个值，表示反向，不动，正向</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">(direction,step)</span>:</span></span><br><span class="line">        <span class="comment"># 计算坐标值</span></span><br><span class="line">        position[<span class="number">0</span>] = position[<span class="number">0</span>] + direction[<span class="number">0</span>] * step</span><br><span class="line">        position[<span class="number">1</span>] = position[<span class="number">1</span>] + direction[<span class="number">1</span>] * step</span><br><span class="line">        <span class="comment"># 返回移动后的坐标</span></span><br><span class="line">        <span class="keyword">return</span> position</span><br><span class="line">    <span class="comment"># 返回内部函数</span></span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取内部函数</span></span><br><span class="line">move = outer()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移动</span></span><br><span class="line">print(move([<span class="number">1</span>, <span class="number">0</span>], <span class="number">10</span>))</span><br><span class="line">print(move([<span class="number">0</span>, <span class="number">1</span>], <span class="number">10</span>))</span><br><span class="line">print(move([<span class="number">-1</span>, <span class="number">0</span>], <span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+<p>程序执行结果:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">10</span>, <span class="number">0</span>]</span><br><span class="line">[<span class="number">10</span>, <span class="number">10</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">10</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>nonlocal 的使用</strong> 如果在闭包的内部函数中直接使用外部函数的变量时，不需要任何操作，直接使用就可以了。</p>
+<p>但是如果要修改外部变量的值，需要将变量声明为 nonlocal</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callFunc</span><span class="params">()</span>:</span></span><br><span class="line">    m = <span class="number">1</span></span><br><span class="line">    n = <span class="number">2</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'show - m: '</span>, m)</span><br><span class="line">        <span class="keyword">nonlocal</span> n <span class="comment">#如果不加会报错。</span></span><br><span class="line">        n *= <span class="number">10</span></span><br><span class="line">        print(<span class="string">'show - n: '</span>, n)</span><br><span class="line">    <span class="keyword">return</span> show</span><br><span class="line"></span><br><span class="line">s = callFunc()</span><br><span class="line">s()</span><br></pre></td></tr></table></figure>
+<p>nonlocal 声明变量为非本地变量，如果确定在程序要修改外部变量，那么建议将 nonlocal 写在内部函数的第一行。</p>
+<p>小结： 闭包就是在一个外部函数中定义了一个内部函数，并且在内部函数中使用了外部函数的变量，并返回了内部函数。</p>
 
     </article>
     <!-- license  -->
@@ -432,17 +442,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2019/05/20/day2/" title="python函数">
-                    <div class="nextTitle">python函数</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2019/01/05/dbknowledge/" title="数据库理论基础">
-                    <div class="prevTitle">数据库理论基础</div>
+                <a href="/2019/05/20/day6/" title="迭代器">
+                    <div class="prevTitle">迭代器</div>
                 </a>
             
         </li>
@@ -584,7 +589,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python-安装"><span class="toc-number">1.</span> <span class="toc-text">python 安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#python-简单函数"><span class="toc-number">2.</span> <span class="toc-text">python 简单函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#类型函数"><span class="toc-number">2.1.</span> <span class="toc-text">类型函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#强制转换函数"><span class="toc-number">2.2.</span> <span class="toc-text">强制转换函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化函数"><span class="toc-number">2.3.</span> <span class="toc-text">格式化函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sep-end"><span class="toc-number">2.4.</span> <span class="toc-text">sep,end</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#概念知识"><span class="toc-number">3.</span> <span class="toc-text">概念知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数组（list）"><span class="toc-number">3.1.</span> <span class="toc-text">数组（list）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数组函数"><span class="toc-number">3.1.1.</span> <span class="toc-text">数组函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集合（set）"><span class="toc-number">3.2.</span> <span class="toc-text">集合（set）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#集合函数"><span class="toc-number">3.2.1.</span> <span class="toc-text">集合函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字典（dict）"><span class="toc-number">3.3.</span> <span class="toc-text">字典（dict）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字典函数"><span class="toc-number">3.3.1.</span> <span class="toc-text">字典函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#元组（tuple）"><span class="toc-number">3.4.</span> <span class="toc-text">元组（tuple）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#元组函数"><span class="toc-number">3.4.1.</span> <span class="toc-text">元组函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#比较运算"><span class="toc-number">3.5.</span> <span class="toc-text">比较运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引切片"><span class="toc-number">3.6.</span> <span class="toc-text">索引切片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">3.7.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量名的规则"><span class="toc-number">3.7.1.</span> <span class="toc-text">变量名的规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运算符"><span class="toc-number">3.8.</span> <span class="toc-text">运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算术运算符"><span class="toc-number">3.8.1.</span> <span class="toc-text">算术运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#赋值运算符"><span class="toc-number">3.8.2.</span> <span class="toc-text">赋值运算符</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-闭包"><span class="toc-number">1.</span> <span class="toc-text">1.8 闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-1-闭包概述"><span class="toc-number">1.1.</span> <span class="toc-text">1.8.1 闭包概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-2-思考"><span class="toc-number">1.2.</span> <span class="toc-text">1.8.2 思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-3-技术点回顾"><span class="toc-number">1.3.</span> <span class="toc-text">1.8.3 技术点回顾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-4-闭包"><span class="toc-number">1.4.</span> <span class="toc-text">1.8.4 闭包</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
