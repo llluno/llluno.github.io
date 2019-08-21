@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+    <meta name="keywords" content="山林,小生,uno,mtman,山林小生">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>TCP/IP和UDP · llluno</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon-1.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mtman&#39;s note.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">TCP/IP和UDP</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mtman's note.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            TCP/IP和UDP
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.6k</span>阅读时长: <span class="post-count reading-time">9 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/05/24</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="socket简介"><a href="#socket简介" class="headerlink" title="socket简介"></a>socket简介</h2><h3 id="1-不同电脑上的进程如何标识"><a href="#1-不同电脑上的进程如何标识" class="headerlink" title="1. 不同电脑上的进程如何标识"></a>1. 不同电脑上的进程如何标识</h3><p>首要解决的问题是如何唯一标识一个进程，否则通信无从谈起！</p>
+<p>在1台电脑上可以通过进程号（PID）来唯一标识一个进程，但是在网络中这是行不通的。</p>
+<p>其实TCP/IP协议族已经帮我们解决了这个问题，“ip地址”可以唯一标识网络中的主机，而“协议+端口”可以唯一标识主机中的应用进程（进程）。</p>
+<p>这样利用ip地址，端口，协议就可以标识网络的进程了，网络中的进程通信就可以利用这个标志与其它进程进行交互</p>
+<h5 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h5><ul>
+<li>所谓<code>进程</code>指的是：运行的程序以及运行时用到的资源这个整体称之为进程（在讲解多任务编程时进行详细讲解）</li>
+<li>所谓<code>进程间通信</code>指的是：运行的程序之间的数据通信</li>
+</ul>
+<h3 id="2-什么是socket"><a href="#2-什么是socket" class="headerlink" title="2. 什么是socket"></a>2. 什么是socket</h3><p>socket(简称 <code>套接字</code>) 是进程间通信的一种方式，它与其他进程间通信的一个主要不同是：</p>
+<p>它能实现不同主机间的进程间通信，我们网络上各种各样的服务大多都是基于 Socket 来完成通信的</p>
+<p>例如我们每天浏览网页、QQ 聊天、收发 email 等等</p>
+<h3 id="3-创建socket"><a href="#3-创建socket" class="headerlink" title="3. 创建socket"></a>3. 创建socket</h3><p>对于一个客户端程序来说，建立一个socket 需要两个步骤。首先，您需要建立一个实际的socket对象。其次，您需要把它连接到远程服务器上。<br>在建立socket对象的时候，您需要告诉系统两件事情：协议家族和通信类型。</p>
+<p>​    协议家族则定义数据如何被传输。</p>
+<p>​    通信类型指明了用什么协议来传输数据。协议的例子包括IPv4（当前的Internet 标准）、IPv6（将来的Internet标准）、IPX/SPX（NetWare）等。到目前为止，最通用的是IPv4。</p>
+<p>在 Python 中 使用socket 模块的函数 socket 就可以完成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">socket.socket(AddressFamily, Type)</span><br></pre></td></tr></table></figure>
+<h4 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h4><p>函数 socket.socket 创建一个 socket，该函数带有两个参数：</p>
+<ul>
+<li>Address Family：地址族，可以选择 AF_INET（用于 Internet 进程间通信） 或者 AF_UNIX（用于同一台机器进程间通信）,实际工作中常用AF_INET</li>
+<li>Type：套接字类型，可以是 SOCK_DGRAM（数据报套接字，主要用于 UDP 协议）或者 SOCK_STREAM（流式套接字，主要用于 TCP 协议）</li>
+</ul>
+<p>创建一个udp socket（udp套接字）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建udp的套接字</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ...这里是使用套接字的功能（省略）...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不用的时候，关闭套接字</span></span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>
+<p>创建一个tcp socket（tcp套接字）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建tcp的套接字</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ...这里是使用套接字的功能（省略）...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不用的时候，关闭套接字</span></span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>
+<h5 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h5><ul>
+<li>套接字使用流程 与 文件的使用流程很类似</li>
+<li>现在和socket的通信已经建立起来了，是利用它发送和接收数据的时候了。Python提供了两种方法：socket对象和文件类对象。<br>socket 对象提供了操作系统的send（）、sendto（）、recv（）和recvfrom（）调用的接口。</li>
+<li>文件类对象提供了read（）、write（）和readline（）这些更典型的Python接口。<br>当您有一些特殊需求的时候，socket对象特别有用。例如：读写数据时、您需要协议可以详细地控制时、使用二进制协议传送固定大小数据时、数据超时需要特殊处理时。<br>文件类对象一般用于面向线性的协议，因为它能通过提供的 readline（）函数自动地为您处理大多数的解析。然而，文件类对象一般只对TCP连接工作得很好，对UDP连接反而不是很好。<br>这是因为TCP连接的行为更像是标准的文件，它们保证数据接收的精确性，并且和文件一样是以字节流形式运转的。而UDP并不像文件那样以字节流形式运转。相反，它是一种基于信息包的通信。文件类对象没有办法操作每个基本的信息包，因而建立、发送和接收UDP信息包的基本机制是不能工作的，并且错误检查也是非常困难的。</li>
+<li><ol>
+<li>创建套接字</li>
+<li>使用套接字收/发数据</li>
+<li>关闭套接字</li>
+</ol>
+<h2 id="tcp客户端"><a href="#tcp客户端" class="headerlink" title="tcp客户端"></a>tcp客户端</h2></li>
+</ul>
+<h2 id="tcp的客户端与服务端"><a href="#tcp的客户端与服务端" class="headerlink" title="tcp的客户端与服务端"></a>tcp的客户端与服务端</h2><p>大家都使用过 QQ、微信、支付宝、外卖、银行等等各种手机 APP, 这些软件叫做客户端。</p>
+<p>这些客户端软件都有一个特点： 如果只有客户端软件是无法享受到软件提供的服务. 客户端软件需要与服务器端软件相互配合才能完成. 简言之, 客户端就是接受服务的一方, 服务器端就是提供服务的一方。</p>
+<p><strong>tcp有严格的客户端和服务端之分</strong>。基于 TCP 传输方式的通信就必须事先建立连接, 则有一方是主动连接的，而另一方是被连接的； 主动连接的一方一般都是客户端, 被连接的一方一般都是服务端。</p>
+<h3 id="tcp客户端构建流程"><a href="#tcp客户端构建流程" class="headerlink" title="tcp客户端构建流程"></a>tcp客户端构建流程</h3><p>示例代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建socket</span></span><br><span class="line">tcp_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目的信息</span></span><br><span class="line">server_ip = input(<span class="string">"请输入服务器ip:"</span>)</span><br><span class="line">server_port = int(input(<span class="string">"请输入服务器port:"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接服务器</span></span><br><span class="line">tcp_client_socket.connect((server_ip, server_port))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提示用户输入数据</span></span><br><span class="line">send_data = input(<span class="string">"请输入要发送的数据："</span>)</span><br><span class="line"></span><br><span class="line">tcp_client_socket.send(send_data.encode(<span class="string">"utf-8"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接收对方发送过来的数据，最大接收1024个字节</span></span><br><span class="line">recvData = tcp_client_socket.recv(<span class="number">1024</span>)</span><br><span class="line">print(<span class="string">'接收到的数据为:'</span>, recvData.decode(<span class="string">'gbk'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭套接字</span></span><br><span class="line">tcp_client_socket.close()</span><br></pre></td></tr></table></figure>
+<h3 id="运行流程："><a href="#运行流程：" class="headerlink" title="运行流程："></a>运行流程：</h3><h4 id="tcp客户端-1"><a href="#tcp客户端-1" class="headerlink" title="tcp客户端"></a><1>tcp客户端</1></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">请输入服务器ip:<span class="number">10.10</span><span class="number">.0</span><span class="number">.47</span></span><br><span class="line">请输入服务器port:<span class="number">8080</span></span><br><span class="line">请输入要发送的数据：你好啊</span><br><span class="line">接收到的数据为: 我很好，你呢</span><br></pre></td></tr></table></figure>
+<h2 id="udp绑定端口"><a href="#udp绑定端口" class="headerlink" title="udp绑定端口"></a>udp绑定端口</h2><h3 id="1-udp网络程序-端口问题"><a href="#1-udp网络程序-端口问题" class="headerlink" title="1. udp网络程序-端口问题"></a>1. udp网络程序-端口问题</h3><ul>
+<li>会变的端口号</li>
+</ul>
+<p>重新运行多次脚本，然后在“网络调试助手”中，看到的现象如下：</p>
+<p>说明：</p>
+<ul>
+<li>每重新运行一次网络程序，上图中红圈中的数字，不一样的原因在于，这个数字标识这个网络程序，当重新运行时，如果没有确定到底用哪个，系统默认会随机分配端口</li>
+</ul>
+<h3 id="2-udp绑定端口"><a href="#2-udp绑定端口" class="headerlink" title="2. udp绑定端口"></a>2. udp绑定端口</h3><h4 id="绑定端口"><a href="#绑定端口" class="headerlink" title=". 绑定端口"></a><1>. 绑定端口</1></h4><p>一般情况下，在一台电脑上运行的网络程序有很多，为了不与其他的网络程序占用同一个端口号，往往在编程中，udp的端口号一般不绑定</p>
+<p>但是如果需要做成一个服务器端的程序的话，是需要绑定的，想想看这又是为什么呢？</p>
+<p>如果报警电话每天都在变，想必世界就会乱了，所以一般服务性的程序，往往需要一个固定的端口号，这就是所谓的端口绑定</p>
+<h4 id="绑定示例"><a href="#绑定示例" class="headerlink" title=". 绑定示例"></a><2>. 绑定示例</2></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 创建套接字</span></span><br><span class="line">udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 绑定本地的相关信息，如果一个网络程序不绑定，则系统会随机分配端口</span></span><br><span class="line">local_addr = (<span class="string">''</span>, <span class="number">7788</span>) <span class="comment">#  ip地址和端口号，ip一般不用写，表示本机的任何一个ip</span></span><br><span class="line">udp_socket.bind(local_addr)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 等待接收对方发送的数据</span></span><br><span class="line">recv_data = udp_socket.recvfrom(<span class="number">1024</span>) <span class="comment">#  1024表示本次接收的最大字节数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 显示接收到的数据</span></span><br><span class="line">print(recv_data[<span class="number">0</span>].decode(<span class="string">'gbk'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 关闭套接字</span></span><br><span class="line">udp_socket.close()</span><br></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title=". 总结"></a><3>. 总结</3></h4><ul>
+<li>一个udp网络程序，可以不绑定，此时操作系统会随机进行分配一个端口，如果重新运行此程序端口可能会发生变化</li>
+<li>一个udp网络程序，也可以绑定信息（ip地址，端口号），如果绑定成功，那么操作系统用这个端口号来进行区别收到的网络数据是否是此进程的</li>
+</ul>
+<ol>
+<li><h2 id="udp网络程序-发送、接收数据"><a href="#udp网络程序-发送、接收数据" class="headerlink" title="udp网络程序-发送、接收数据"></a>udp网络程序-发送、接收数据</h2><h3 id="1-udp网络程序-发送数据"><a href="#1-udp网络程序-发送数据" class="headerlink" title="1. udp网络程序-发送数据"></a>1. udp网络程序-发送数据</h3><p>创建一个基于udp的网络程序流程很简单，具体步骤如下：</p>
+<ol>
+<li>创建客户端套接字</li>
+<li>发送/接收数据</li>
+<li>关闭套接字</li>
+</ol>
+<p>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 1. 创建udp socket套接字对象</span></span><br><span class="line">    udp_socket=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)s</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 通过udp socket发送消息</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.1 准备目标主机的ip地址和端口号</span></span><br><span class="line">    dest_addr=(<span class="string">"192.168.46.129"</span>,<span class="number">8080</span>)</span><br><span class="line">    <span class="comment"># 是一个元组类型，第一个元素是字符串，是目标主机的ip的地址</span></span><br><span class="line">    <span class="comment"># 第二个元素是整数 ，是目标主机的进程端口号</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.2  取得要发送的数据</span></span><br><span class="line">    send_data=input(<span class="string">"请输入要发送的数据:"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.3 发送数据到目标主机</span></span><br><span class="line">    udp_socket.sendto(send_data.encode(<span class="string">"gbk"</span>),dest_addr) <span class="comment"># 第一个参数是要发送的数据，第二个参数是目标主机地址</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 关闭socket套接字</span></span><br><span class="line">    udp_socket.close()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h3 id="2-udp网络程序-发送、接收数据"><a href="#2-udp网络程序-发送、接收数据" class="headerlink" title="2. udp网络程序-发送、接收数据"></a>2. udp网络程序-发送、接收数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 1. 创建udp socket套接字对象</span></span><br><span class="line">    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 通过udp socket发送消息</span></span><br><span class="line">    <span class="comment"># 2.1 准备目标主机的ip地址和端口号</span></span><br><span class="line">    dest_addr = (<span class="string">"192.168.236.129"</span>, <span class="number">8080</span>)</span><br><span class="line">    <span class="comment"># 是一个元组类型，第一个元素是字符串，是目标主机的ip的地址</span></span><br><span class="line">    <span class="comment"># 第二个元素是整数 ，是目标主机的进程的端口号</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.2  取得要发送的数据</span></span><br><span class="line">    send_data = input(<span class="string">"请输入要发送的数据:"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.3 发送数据到目标主机</span></span><br><span class="line">    udp_socket.sendto(send_data.encode(<span class="string">"utf-8"</span>), dest_addr)  <span class="comment"># 第一个参数是要发送的数据，第二个参数是目标主机地址</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 等待从目标主机回传的消息 ，它是阻塞状态</span></span><br><span class="line">    recv_data = udp_socket.recvfrom(<span class="number">1024</span>)  <span class="comment"># buffersize : 缓存的大小，一次最多接收多少字节的数据</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 显示接收到的消息</span></span><br><span class="line">    <span class="comment"># 回传的消息： (b'good', ('192.168.236.129', 8080))</span></span><br><span class="line">    <span class="comment"># 元组类型，第一个元素是回传的消息 ，第二个是目标主机的ip和端口</span></span><br><span class="line">    recv_info=recv_data[<span class="number">0</span>].decode(<span class="string">"utf-8"</span>) <span class="comment"># 解码，把字节串转换为字符串</span></span><br><span class="line">    recv_addr=str(recv_data[<span class="number">1</span>])</span><br><span class="line">    print(<span class="string">"接收到的消息:%s ,消息来自&lt;&lt;&lt;%s"</span> %(recv_info,recv_addr))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5. 关闭socket套接字</span></span><br><span class="line">    udp_socket.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>网络调试助手截图：</p>
+</li>
+</ol>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/05/24/day11/" title="tcp与udp的比较">
+                    <div class="nextTitle">tcp与udp的比较</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/05/23/day9/" title="网络通信">
+                    <div class="prevTitle">网络通信</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQxMS8xNzk1OA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:web@mtman.site" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/qrcode.jpg">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//weibo.com/2261202055" class="iconfont-archer weibo" target="_blank" title="weibo"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/1418144" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#socket简介"><span class="toc-number">1.</span> <span class="toc-text">socket简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-不同电脑上的进程如何标识"><span class="toc-number">1.1.</span> <span class="toc-text">1. 不同电脑上的进程如何标识</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#注意："><span class="toc-number">1.1.0.1.</span> <span class="toc-text">注意：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-什么是socket"><span class="toc-number">1.2.</span> <span class="toc-text">2. 什么是socket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-创建socket"><span class="toc-number">1.3.</span> <span class="toc-text">3. 创建socket</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#说明："><span class="toc-number">1.3.1.</span> <span class="toc-text">说明：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#说明"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">说明</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcp客户端"><span class="toc-number">2.</span> <span class="toc-text">tcp客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcp的客户端与服务端"><span class="toc-number">3.</span> <span class="toc-text">tcp的客户端与服务端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tcp客户端构建流程"><span class="toc-number">3.1.</span> <span class="toc-text">tcp客户端构建流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行流程："><span class="toc-number">3.2.</span> <span class="toc-text">运行流程：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#tcp客户端-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">tcp客户端</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#udp绑定端口"><span class="toc-number">4.</span> <span class="toc-text">udp绑定端口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-udp网络程序-端口问题"><span class="toc-number">4.1.</span> <span class="toc-text">1. udp网络程序-端口问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-udp绑定端口"><span class="toc-number">4.2.</span> <span class="toc-text">2. udp绑定端口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#绑定端口"><span class="toc-number">4.2.1.</span> <span class="toc-text">. 绑定端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#绑定示例"><span class="toc-number">4.2.2.</span> <span class="toc-text">. 绑定示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.2.3.</span> <span class="toc-text">. 总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#udp网络程序-发送、接收数据"><span class="toc-number">5.</span> <span class="toc-text">udp网络程序-发送、接收数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-udp网络程序-发送数据"><span class="toc-number">5.1.</span> <span class="toc-text">1. udp网络程序-发送数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-udp网络程序-发送、接收数据"><span class="toc-number">5.2.</span> <span class="toc-text">2. udp网络程序-发送、接收数据</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 16
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span><a class="archive-post-title" href="/2019/08/20/hivefunc/">hive函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span><a class="archive-post-title" href="/2019/08/19/createhive/">hive创建表、分区、分桶</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day12/">with open</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day10/">TCP/IP和UDP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day11/">tcp与udp的比较</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span><a class="archive-post-title" href="/2019/05/23/day9/">网络通信</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day8/">面向对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day7/">闭包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day2/">python函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day4/">生成器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/05</span><a class="archive-post-title" href="/2019/01/05/dbknowledge/">数据库理论基础</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href="/2018/12/01/bigdata/">大数据课程中的算法</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="bigdata"><span class="iconfont-archer">&#xe606;</span>bigdata</span>
+    
+        <span class="sidebar-tag-name" data-tags="hadoop"><span class="iconfont-archer">&#xe606;</span>hadoop</span>
+    
+        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
+    
+        <span class="sidebar-tag-name" data-tags="大数据"><span class="iconfont-archer">&#xe606;</span>大数据</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

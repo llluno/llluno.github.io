@@ -22,7 +22,7 @@
     <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>大数据课程中的算法 · llluno</title>
+    <title>网络通信 · llluno</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Mtman&#39;s note.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">大数据课程中的算法</a>
+                <a href="#" class="post-name">网络通信</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            大数据课程中的算法
+            网络通信
             <!-- 404 -->
             
         </h1>
@@ -266,18 +266,18 @@ height:50vh;
                 
                     <div class="post-intro-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="bigdata">bigdata</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="计算机网络">计算机网络</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">6</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.5k</span>阅读时长: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2018/12/01</span>
+                    <span class="post-intro-time">2019/05/23</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,7 +401,52 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p><a href="https://mtman.site/2018/12/01/bigdata/" target="_blank" rel="noopener">详细算法点此</a></p>
+        <h2 id="网络通信概述-了解"><a href="#网络通信概述-了解" class="headerlink" title="网络通信概述(了解)"></a>网络通信概述(了解)</h2><h3 id="1-什么是网络"><a href="#1-什么是网络" class="headerlink" title="1. 什么是网络"></a>1. 什么是网络</h3><ul>
+<li><p>网络就是一种辅助双方或者多方能够连接在一起的工具</p>
+</li>
+<li><p>如果没有网络、没有流量、没有wifi的生活是多么的孤单</p>
+<p>​    很久以来，人们就对计算机之间的通信很感兴趣。人们使用过很多通信方法，有些已经不再使    用了，而有些还在使用。然而，现在用得最广泛的还是TCP/IP（Transmission Control Protocol/lnternet Protocol）。TCPMP是标准的协议，它可以使世界范围内的计算机通过Intermet或本地的网络通信。<br>​    TCP/IP事实上是一些协议（protocols）的合集。当前大多数使用中的通信都使用TCP协议。<br>Internet是在一些共享的线路上发送数据’的。例如：在您的计算机上也许同时运行着几个应用程序，如Web浏览器、通讯软件等程序，而您只须通过一条单一的线路来连接互联网。上面所有的程序都共享这个连接，简单地说，用户往往不会觉察到这个共享的发生。</p>
+</li>
+</ul>
+<h3 id="2-使用网络的目的"><a href="#2-使用网络的目的" class="headerlink" title="2. 使用网络的目的"></a>2. 使用网络的目的</h3><p>使用网络把多方连接在一起，然后进行数据传递，即把数据从一方传递给另外一方</p>
+<p>为了让在不同的电脑上运行的软件，之间能够互相传递数据，就需要借助网络的功能</p>
+<h3 id="3-何为网络编程"><a href="#3-何为网络编程" class="headerlink" title="3. 何为网络编程"></a>3. 何为网络编程</h3><ul>
+<li>所谓的网络编程就是，让在网络中不同的电脑上的软件能够进行数据传递，即网络中不同主机进程之间的通信</li>
+</ul>
+<h2 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h2><h3 id="1-生活中的地址与标识"><a href="#1-生活中的地址与标识" class="headerlink" title="1. 生活中的地址与标识"></a>1. 生活中的地址与标识</h3><p>不同的网络中，采用唯一的标识来区分不同的主体，比如车牌号、建筑物地址、电话号码、员工编号等等</p>
+<p>一台电脑怎么找到很多电脑中的一台呢？</p>
+<p>警察怎么找到嫌疑犯的？</p>
+<h3 id="2-ip地址的作用"><a href="#2-ip地址的作用" class="headerlink" title="2. ip地址的作用"></a>2. ip地址的作用</h3><h4 id="ip地址：用来在网络中标记一台电脑，比如192-168-1-1；在同一网络中是唯一的。"><a href="#ip地址：用来在网络中标记一台电脑，比如192-168-1-1；在同一网络中是唯一的。" class="headerlink" title="ip地址：用来在网络中标记一台电脑，比如192.168.1.1；在同一网络中是唯一的。"></a>ip地址：用来在网络中标记一台电脑，比如192.168.1.1；在同一网络中是唯一的。</h4><p>同一网络：好比班级编号，球队编号。</p>
+<p>同一网络：例如同一个局域网， 一个教室里。</p>
+<h3 id="3-ip地址的分类（了解）"><a href="#3-ip地址的分类（了解）" class="headerlink" title="3. ip地址的分类（了解）"></a>3. ip地址的分类（了解）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">目前ip地址有ipv4与ipv6两种类别，ipv4由32位二进制位构成，ipv6由128位二进制位构成，目前主要使用ipv4,讲解也是基于ipv4讲解</span><br><span class="line"></span><br><span class="line">每一个IP地址包括两部分：网络号和主机号，好比电话号码由区号+电话主机号组成</span><br><span class="line"></span><br><span class="line">ip地址的组成：</span><br><span class="line"></span><br><span class="line">	本地链接 IPv6 地址. . . . . . . . : fe80::924:61ad:d723:42cc%11</span><br><span class="line"> 	IPv4 地址 . . . . . . . . . . . . : 192.168.100.235</span><br><span class="line"> 	子网掩码  . . . . . . . . . . . . : 255.255.255.0</span><br><span class="line"> 	默认网关. . . . . . . . . . . . . : 192.168.100.254</span><br><span class="line"></span><br><span class="line">ipv6是未来的准备，物联网时代，所有的设备都联网的时候，需要扩容。</span><br><span class="line"></span><br><span class="line">ipv4: 目前还是主流： 192.168.100.235  </span><br><span class="line"></span><br><span class="line">	   由32位二进制组成，分成4段，每段范围0-255（2的8次方， 共4个字节）</span><br></pre></td></tr></table></figure>
+<h4 id="3-1-A类IP地址"><a href="#3-1-A类IP地址" class="headerlink" title="3.1 A类IP地址"></a>3.1 A类IP地址</h4><p>一个A类IP地址由1字节的网络地址和3字节主机地址组成，网络地址的最高位必须是“0”，</p>
+<p>地址范围1.0.0.1-126.255.255.254</p>
+<p>二进制表示为：00000001 00000000 00000000 00000001 - 01111110 11111111 11111111 11111110</p>
+<p>8位二进制全1就是255</p>
+<p>可用的A类网络有126个，每个网络能容纳1677214个主机</p>
+<h4 id="3-2-B类IP地址"><a href="#3-2-B类IP地址" class="headerlink" title="3.2 B类IP地址"></a>3.2 B类IP地址</h4><p>一个B类IP地址由2个字节的网络地址和2个字节的主机地址组成，网络地址的最高位必须是“10”，</p>
+<p>地址范围128.1.0.1-191.255.255.254</p>
+<p>二进制表示为：10000000 00000001 00000000 00000001 - 10111111 11111111 11111111 11111110</p>
+<p>可用的B类网络有16384个，每个网络能容纳65534主机</p>
+<h4 id="3-3-C类IP地址"><a href="#3-3-C类IP地址" class="headerlink" title="3.3 C类IP地址"></a>3.3 C类IP地址</h4><p>一个C类IP地址由3字节的网络地址和1字节的主机地址组成，网络地址的最高位必须是“110”</p>
+<p>范围192.0.1.1-223.255.255.254</p>
+<p>二进制表示为: 11000000 00000000 00000001 00000001 - 11011111 11111111 11111110 11111110</p>
+<p>C类网络可达2097152个，每个网络能容纳254个主机</p>
+<h4 id="3-4-D类地址用于多点广播"><a href="#3-4-D类地址用于多点广播" class="headerlink" title="3.4 D类地址用于多点广播"></a>3.4 D类地址用于多点广播</h4><p>D类IP地址第一个字节以“1110”开始，它是一个专门保留的地址。</p>
+<p>它并不指向特定的网络，目前这一类地址被用在多点广播（Multicast）中</p>
+<p>多点广播地址用来一次寻址一组计算机</p>
+<p>地址范围224.0.0.1-239.255.255.254</p>
+<p>网上视频会议、网上视频点播就是采用多点广播</p>
+<blockquote>
+<p>广播地址 (Broadcast Address) 是专门用于同时向同一网络中所有主机发送数据的一个地址。在使用TCP/IP 协议的网络中, 主机标识段 HOST ID 为全1 的IP 地址为广播地址，广播分组传送给 HOST ID 段所涉及的所有计算机. 例如, 对于 192.168.50.26(255.255.255.0) 网段，其广播地址为192.168.50.255, 当发出一个目的地址为 192.168.50.255 的数据时, 它将被分发给该网段上的所有计算机. 飞秋，内网通就是通过广播地址来广播数据的</p>
+</blockquote>
+<h4 id="3-5-E类IP地址"><a href="#3-5-E类IP地址" class="headerlink" title="3.5 E类IP地址"></a>3.5 E类IP地址</h4><p>以“1111”开始，为将来使用保留</p>
+<p>E类地址保留，仅作实验和开发用</p>
+<h4 id="3-6-私有ip"><a href="#3-6-私有ip" class="headerlink" title="3.6 私有ip"></a>3.6 私有ip</h4><p>在这么多网络IP中，国际规定有一部分IP地址是用于我们的局域网使用，也就</p>
+<p>是属于私网IP，不在公网中使用的，它们的范围是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">10.0.0.0～10.255.255.255</span><br><span class="line"></span><br><span class="line">172.16.0.0～172.31.255.255</span><br><span class="line"></span><br><span class="line">192.168.0.0～192.168.255.255</span><br></pre></td></tr></table></figure>
+<h4 id="3-7-回路地址"><a href="#3-7-回路地址" class="headerlink" title="3.7 回路地址"></a>3.7 回路地址</h4><p>IP地址127．0．0．1~127．255．255．255用于回路测试，</p>
+<p>如：127.0.0.1可以代表本机IP地址，用<code>http://127.0.0.1</code>就可以测试本机中配置的Web服务器。</p>
 
     </article>
     <!-- license  -->
@@ -411,12 +456,17 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href="/2019/01/05/dbknowledge/" title="数据库理论基础">
-                    <div class="nextTitle">数据库理论基础</div>
+                <a href="/2019/05/24/day10/" title="TCP/IP和UDP">
+                    <div class="nextTitle">TCP/IP和UDP</div>
                 </a>
             
         </li>
         <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/05/21/day8/" title="面向对象">
+                    <div class="prevTitle">面向对象</div>
+                </a>
             
         </li>
     </ul>
@@ -553,7 +603,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络通信概述-了解"><span class="toc-number">1.</span> <span class="toc-text">网络通信概述(了解)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-什么是网络"><span class="toc-number">1.1.</span> <span class="toc-text">1. 什么是网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-使用网络的目的"><span class="toc-number">1.2.</span> <span class="toc-text">2. 使用网络的目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-何为网络编程"><span class="toc-number">1.3.</span> <span class="toc-text">3. 何为网络编程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#地址"><span class="toc-number">2.</span> <span class="toc-text">地址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-生活中的地址与标识"><span class="toc-number">2.1.</span> <span class="toc-text">1. 生活中的地址与标识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ip地址的作用"><span class="toc-number">2.2.</span> <span class="toc-text">2. ip地址的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ip地址：用来在网络中标记一台电脑，比如192-168-1-1；在同一网络中是唯一的。"><span class="toc-number">2.2.1.</span> <span class="toc-text">ip地址：用来在网络中标记一台电脑，比如192.168.1.1；在同一网络中是唯一的。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ip地址的分类（了解）"><span class="toc-number">2.3.</span> <span class="toc-text">3. ip地址的分类（了解）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-A类IP地址"><span class="toc-number">2.3.1.</span> <span class="toc-text">3.1 A类IP地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-B类IP地址"><span class="toc-number">2.3.2.</span> <span class="toc-text">3.2 B类IP地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-C类IP地址"><span class="toc-number">2.3.3.</span> <span class="toc-text">3.3 C类IP地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-D类地址用于多点广播"><span class="toc-number">2.3.4.</span> <span class="toc-text">3.4 D类地址用于多点广播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-E类IP地址"><span class="toc-number">2.3.5.</span> <span class="toc-text">3.5 E类IP地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-私有ip"><span class="toc-number">2.3.6.</span> <span class="toc-text">3.6 私有ip</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-7-回路地址"><span class="toc-number">2.3.7.</span> <span class="toc-text">3.7 回路地址</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
