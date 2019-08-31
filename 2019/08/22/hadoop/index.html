@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+    <meta name="keywords" content="山林,小生,uno,mtman,山林小生">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>hadoop与hdfs · llluno</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon-1.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mtman&#39;s note.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">hadoop与hdfs</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mtman's note.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            hadoop与hdfs
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="hadoop">hadoop</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="大数据">大数据</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="bigdata">bigdata</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="HDFS">HDFS</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">4.8k</span>阅读时长: <span class="post-count reading-time">20 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/08/22</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="hadoop的安装"><a href="#hadoop的安装" class="headerlink" title="hadoop的安装"></a>hadoop的安装</h1><p>教程太多，就不详细描述，推荐看阿里云的教程<br><a href="https://yq.aliyun.com/go/articleRenderRedirect?spm=a2c4e.11153940.0.0.45b7620d1ixwpf&amp;url=https%3A%2F%2Fyq.aliyun.com%2Farticles%2F319128" target="_blank" rel="noopener">伪分布式</a><br><a href="https://yq.aliyun.com/go/articleRenderRedirect?spm=a2c4e.11153940.0.0.45b7620d1ixwpf&amp;url=https%3A%2F%2Fyq.aliyun.com%2Farticles%2F323366" target="_blank" rel="noopener">完全分布式</a><br><a href="https://yq.aliyun.com/go/articleRenderRedirect?spm=a2c4e.11153940.0.0.45b7620d1ixwpf&amp;url=https%3A%2F%2Fyq.aliyun.com%2Farticles%2F328880" target="_blank" rel="noopener">HA高可用</a></p>
+<h1 id="hadoop的三大组件"><a href="#hadoop的三大组件" class="headerlink" title="hadoop的三大组件"></a>hadoop的三大组件</h1><h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>在hadoop当中，分布式文件系统（HDFS），对文件系统有一个抽象，HDFS属于当中的一个实现类，也就是说分布式文件系统类似于一个接口，定义了标准，下面有很多的实现类，其中HDFS是一个子实现类而已，但是现在很多人都只知道一种就是HDFS的实现，并没有了解过其他的实现类，其实分布式文件系统的实现有很多种。</p>
+<h3 id="namenode"><a href="#namenode" class="headerlink" title="namenode"></a>namenode</h3><p>1、    NameNode是一个中心服务器，单一节点（简化系统的设计和实现），负责管理文件系统的名字空间（namespace）以及客户端对文件的访问<br>2、    文件操作，namenode是负责文件元数据的操作，datanode负责处理文件内容的读写请求，跟文件内容相关的数据流不经过Namenode，只询问它跟哪个dataNode联系，否则NameNode会成为系统的瓶颈<br>3、    副本存放在哪些Datanode上由NameNode来控制，根据全局情况作出块放置决定，读取文件时NameNode尽量让用户先读取最近的副本，降低读取网络开销和读取延时<br>4、    NameNode全权管理数据库的复制，它周期性的从集群中的每个DataNode接收心跳信合和状态报告，接收到心跳信号意味着DataNode节点工作正常，块状态报告包含了一个该DataNode上所有的数据列表</p>
+<h3 id="namenode与datanode的关系"><a href="#namenode与datanode的关系" class="headerlink" title="namenode与datanode的关系"></a>namenode与datanode的关系</h3><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6giymnxgwj30n20do3zw.jpg" alt></p>
+<h3 id="hdfs的架构之文件的文件副本机制"><a href="#hdfs的架构之文件的文件副本机制" class="headerlink" title="hdfs的架构之文件的文件副本机制"></a>hdfs的架构之文件的文件副本机制</h3><h4 id="hdfs的架构之文件的文件副本机制以及block块存储"><a href="#hdfs的架构之文件的文件副本机制以及block块存储" class="headerlink" title="hdfs的架构之文件的文件副本机制以及block块存储"></a>hdfs的架构之文件的文件副本机制以及block块存储</h4><p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gj3u56m2j30n20e6dhk.jpg" alt><br>所有的文件都是以block块的方式存放在HDFS文件系统当中，在hadoop1当中，文件的block块默认大小是64M，hadoop2当中，文件的block块大小默认是128M，block块的大小可以通过hdfs-site.xml当中的配置文件进行指定<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.block.size<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>块大小 以KB为单位<span class="tag">&lt;/<span class="name">value</span>&gt;</span>//只写数值就可以</span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="抽象成数据块的好处"><a href="#抽象成数据块的好处" class="headerlink" title="抽象成数据块的好处"></a>抽象成数据块的好处</h4><ol>
+<li>一个文件有可能大于集群中任意一个磁盘<br>10T*3/128 = xxx块 2T，2T，2T 文件方式存—–&gt;多个block块，这些block块属于一个文件</li>
+<li>使用块抽象而不是文件可以简化存储子系统</li>
+<li>块非常适合用于数据备份进而提供数据容错能力和可用性<h4 id="块缓存"><a href="#块缓存" class="headerlink" title="块缓存"></a>块缓存</h4>通常DataNode从磁盘中读取块，但对于访问频繁的文件，其对应的块可能被显示的缓存在DataNode的内存中，以堆外块缓存的形式存在。默认情况下，一个块仅缓存在一个DataNode的内存中，当然可以针对每个文件配置DataNode的数量。作业调度器通过在缓存块的DataNode上运行任务，可以利用块缓存的优势提高读操作的性能。<br>例如：<br>连接（join）操作中使用的一个小的查询表就是块缓存的一个很好的候选。<br>用户或应用通过在缓存池中增加一个cache directive来告诉namenode需要缓存哪些文件及存多久。缓存池（cache pool）是一个拥有管理缓存权限和资源使用的管理性分组。<br>例如一个文件 130M，会被切分成2个block块，保存在两个block块里面，实际占用磁盘130M空间，而不是占用256M的磁盘空间</li>
+</ol>
+<h4 id="hdfs的文件权限验证"><a href="#hdfs的文件权限验证" class="headerlink" title="hdfs的文件权限验证"></a>hdfs的文件权限验证</h4><p>hdfs的文件权限机制与linux系统的文件权限机制类似<br>r:read   w:write  x:execute  权限x对于文件表示忽略，对于文件夹表示是否有权限访问其内容<br>如果linux系统用户zhangsan使用hadoop命令创建一个文件，那么这个文件在HDFS当中的owner就是zhangsan<br>HDFS文件权限的目的，防止好人做错事，而不是阻止坏人做坏事。HDFS相信你告诉我你是谁，你就是谁</p>
+<h3 id="HDFS的元数据信息"><a href="#HDFS的元数据信息" class="headerlink" title="HDFS的元数据信息"></a>HDFS的元数据信息</h3><h4 id="HDFS的元数据信息FSimage以及edits和secondaryNN的作用"><a href="#HDFS的元数据信息FSimage以及edits和secondaryNN的作用" class="headerlink" title="HDFS的元数据信息FSimage以及edits和secondaryNN的作用"></a>HDFS的元数据信息FSimage以及edits和secondaryNN的作用</h4><p>在hadoop当中，使用如下架构的时候<br> <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gj49z9asj30n20dogmy.jpg" alt><br>也就是namenode就一个的时候，所有的元数据信息都保存在了FsImage与Eidts文件当中，这两个文件就记录了所有的数据的元数据信息，元数据信息的保存目录配置在了hdfs-site.xml当中<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.name.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///export/servers/hadoop-2.6.0-cdh5.14.0/hadoopDatas/namenodeDatas<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///export/servers/hadoop-2.6.0-cdh5.14.0/hadoopDatas/dfs/nn/edits<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="FSImage与edits详解"><a href="#FSImage与edits详解" class="headerlink" title="FSImage与edits详解"></a>FSImage与edits详解</h4><p>客户端对hdfs进行写文件时会首先被记录在edits文件中。<br>edits修改时元数据也会更新。<br>每次hdfs更新时edits先更新后客户端才会看到最新信息。<br>fsimage:是namenode中关于元数据的镜像，一般称为检查点。<br>一般开始时对namenode的操作都放在edits中，为什么不放在fsimage中呢？<br>因为fsimage是namenode的完整的镜像，内容很大，如果每次都加载到内存的话生成树状拓扑结构，这是非常耗内存和CPU。<br>fsimage内容包含了namenode管理下的所有datanode中文件及文件block及block所在的datanode的元数据信息。随着edits内容增大，就需要在一定时间点和fsimage合并。<br>合并过程见SecondaryNameNode如何辅助管理FSImage与edits</p>
+<h4 id="FSimage文件当中的文件信息查看"><a href="#FSimage文件当中的文件信息查看" class="headerlink" title="FSimage文件当中的文件信息查看"></a>FSimage文件当中的文件信息查看</h4><p>官方查看文档<br><a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.0/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.0/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html</a></p>
+<p>使用命令 hdfs  oiv<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd  /export/servers/hadoop-2.6.0-cdh5.14.0/hadoopDatas/namenodeDatas/current</span><br><span class="line">hdfs oiv -i fsimage_0000000000000000864 -p XML -o hello.xml</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gjdx1hmqj30j60fwtc0.jpg" alt></p>
+<h4 id="edits当中的文件信息查看"><a href="#edits当中的文件信息查看" class="headerlink" title="edits当中的文件信息查看"></a>edits当中的文件信息查看</h4><p>官方查看文档<br><a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.0/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.0/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html</a><br>查看命令 hdfs  oev<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd  /export/servers/hadoop-2.6.0-cdh5.14.0/hadoopDatas/dfs/nn/edits</span><br><span class="line">hdfs oev -i  edits_0000000000000000865-0000000000000000866 -o myedit.xml -p XML</span><br></pre></td></tr></table></figure></p>
+<h4 id="secondarynameNode如何辅助管理FSImage与Edits文件"><a href="#secondarynameNode如何辅助管理FSImage与Edits文件" class="headerlink" title="secondarynameNode如何辅助管理FSImage与Edits文件"></a>secondarynameNode如何辅助管理FSImage与Edits文件</h4><p>①：secnonaryNN通知NameNode切换editlog<br>②：secondaryNN从NameNode中获得FSImage和editlog(通过http方式)<br>③：secondaryNN将FSImage载入内存，然后开始合并editlog，合并之后成为新的fsimage<br>④：secondaryNN将新的fsimage发回给NameNode<br>⑤：NameNode用新的fsimage替换旧的fsimage</p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gjdp86yhj30n20gy40s.jpg" alt><br><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gjdiuq0gj30n20diwiv.jpg" alt><br>完成合并的是secondarynamenode，会请求namenode停止使用edits,暂时将新写操作放入一个新的文件中（edits.new)。secondarynamenode从namenode中通过http get获得edits，因为要和fsimage合并，所以也是通过http get 的方式把fsimage加载到内存，然后逐一执行具体对文件系统的操作，与fsimage合并，生成新的fsimage，然后把fsimage发送给namenode，通过http post的方式。namenode从secondarynamenode获得了fsimage后会把原有的fsimage替换为新的fsimage,把edits.new变成edits。同时会更新fstime。<br>hadoop进入安全模式时需要管理员使用dfsadmin的save namespace来创建新的检查点。<br>secondarynamenode在合并edits和fsimage时需要消耗的内存和namenode差不多，所以一般把namenode和secondarynamenode放在不同的机器上。<br>fs.checkpoint.period: 默认是一个小时（3600s)<br>fs.checkpoint.size:  edits达到一定大小时也会触发合并（默认64MB)</p>
+<h3 id="HDFS的文件写入过程"><a href="#HDFS的文件写入过程" class="headerlink" title="HDFS的文件写入过程"></a>HDFS的文件写入过程</h3><p> <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gjd5o976j30n20d2taz.jpg" alt><br>详细步骤解析：<br>1、 client发起文件上传请求，通过RPC与NameNode建立通讯，NameNode检查目标文件是否已存在，父目录是否存在，返回是否可以上传；<br>2、 client请求第一个block该传输到哪些DataNode服务器上；<br>3、 NameNode根据配置文件中指定的备份数量及机架感知原理进行文件分配，返回可用的DataNode的地址如：A，B，C；</p>
+<p>注：Hadoop在设计时考虑到数据的安全与高效，数据文件默认在HDFS上存放三份，存储策略为本地一份，同机架内其它某一节点上一份，不同机架的某一节点上一份。<br>4、 client请求3台DataNode中的一台A上传数据（本质上是一个RPC调用，建立pipeline），A收到请求会继续调用B，然后B调用C，将整个pipeline建立完成，后逐级返回client；<br>5、 client开始往A上传第一个block（先从磁盘读取数据放到一个本地内存缓存），以packet为单位（默认64K），A收到一个packet就会传给B，B传给C；A每传一个packet会放入一个应答队列等待应答。<br>6、 数据被分割成一个个packet数据包在pipeline上依次传输，在pipeline反方向上，逐个发送ack（命令正确应答），最终由pipeline中第一个DataNode节点A将pipelineack发送给client;<br>7、 当一个block传输完成之后，client再次请求NameNode上传第二个block到服务器。</p>
+<p>8、HDFS的文件读取过程<br> <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gjcpjqcnj30n20dmtac.jpg" alt></p>
+<p>详细步骤解析<br>1、 Client向NameNode发起RPC请求，来确定请求文件block所在的位置；<br>2、 NameNode会视情况返回文件的部分或者全部block列表，对于每个block，NameNode 都会返回含有该 block 副本的 DataNode 地址；  这些返回的 DN 地址，会按照集群拓扑结构得出 DataNode 与客户端的距离，然后进行排序，排序两个规则：网络拓扑结构中距离 Client 近的排靠前；心跳机制中超时汇报的 DN 状态为 STALE，这样的排靠后；<br>3、 Client 选取排序靠前的 DataNode 来读取 block，如果客户端本身就是DataNode,那么将从本地直接获取数据(短路读取特性)；<br>4、 底层上本质是建立 Socket Stream（FSDataInputStream），重复的调用父类 DataInputStream 的 read 方法，直到这个块上的数据读取完毕；<br>5、 当读完列表的 block 后，若文件读取还没有结束，客户端会继续向NameNode 获取下一批的 block 列表；<br>6、 读取完一个 block 都会进行 checksum 验证，如果读取 DataNode 时出现错误，客户端会通知 NameNode，然后再从下一个拥有该 block 副本的DataNode 继续读。<br>7、 read 方法是并行的读取 block 信息，不是一块一块的读取；NameNode 只是返回Client请求包含块的DataNode地址，并不是返回请求块的数据；<br> 8、 最终读取来所有的 block 会合并成一个完整的最终文件。</p>
+<h3 id="HDFS的API操作"><a href="#HDFS的API操作" class="headerlink" title="HDFS的API操作"></a>HDFS的API操作</h3><h4 id="创建maven工程并导入jar包"><a href="#创建maven工程并导入jar包" class="headerlink" title="创建maven工程并导入jar包"></a>创建maven工程并导入jar包</h4><p>由于cdh版本的所有的软件涉及版权的问题，所以并没有将所有的jar包托管到maven仓库当中去，而是托管在了CDH自己的服务器上面，所以我们默认去maven的仓库下载不到，需要自己手动的添加repository去CDH仓库进行下载，以下两个地址是官方文档说明，请仔细查阅<br><a href="https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_vd_cdh5_maven_repo.html" target="_blank" rel="noopener">https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_vd_cdh5_maven_repo.html</a><br><a href="https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_vd_cdh5_maven_repo_514x.html" target="_blank" rel="noopener">https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_vd_cdh5_maven_repo_514x.html</a><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>cloudera<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-mr1-cdh5.14.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-cdh5.14.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-hdfs<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-cdh5.14.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-cdh5.14.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.testng<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testng<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--    &lt;verbal&gt;true&lt;/verbal&gt;--&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-shade-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>shade<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">minimizeJar</span>&gt;</span>true<span class="tag">&lt;/<span class="name">minimizeJar</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--  &lt;plugin&gt;</span></span><br><span class="line"><span class="comment">            &lt;artifactId&gt;maven-assembly-plugin &lt;/artifactId&gt;</span></span><br><span class="line"><span class="comment">            &lt;configuration&gt;</span></span><br><span class="line"><span class="comment">                &lt;descriptorRefs&gt;</span></span><br><span class="line"><span class="comment">                    &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</span></span><br><span class="line"><span class="comment">                &lt;/descriptorRefs&gt;</span></span><br><span class="line"><span class="comment">                &lt;archive&gt;</span></span><br><span class="line"><span class="comment">                    &lt;manifest&gt;</span></span><br><span class="line"><span class="comment">                        &lt;mainClass&gt;cn.itcast.hadoop.db.DBToHdfs2&lt;/mainClass&gt;</span></span><br><span class="line"><span class="comment">                    &lt;/manifest&gt;</span></span><br><span class="line"><span class="comment">                &lt;/archive&gt;</span></span><br><span class="line"><span class="comment">            &lt;/configuration&gt;</span></span><br><span class="line"><span class="comment">            &lt;executions&gt;</span></span><br><span class="line"><span class="comment">                &lt;execution&gt;</span></span><br><span class="line"><span class="comment">                    &lt;id&gt;make-assembly&lt;/id&gt;</span></span><br><span class="line"><span class="comment">                    &lt;phase&gt;package&lt;/phase&gt;</span></span><br><span class="line"><span class="comment">                    &lt;goals&gt;</span></span><br><span class="line"><span class="comment">                        &lt;goal&gt;single&lt;/goal&gt;</span></span><br><span class="line"><span class="comment">                    &lt;/goals&gt;</span></span><br><span class="line"><span class="comment">                &lt;/execution&gt;</span></span><br><span class="line"><span class="comment">            &lt;/executions&gt;</span></span><br><span class="line"><span class="comment">        &lt;/plugin&gt;--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="使用url的方式访问数据（了解）"><a href="#使用url的方式访问数据（了解）" class="headerlink" title="使用url的方式访问数据（了解）"></a>使用url的方式访问数据（了解）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demo1</span><span class="params">()</span><span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    <span class="comment">//第一步：注册hdfs 的url，让java代码能够识别hdfs的url形式</span></span><br><span class="line">    URL.setURLStreamHandlerFactory(<span class="keyword">new</span> FsUrlStreamHandlerFactory());</span><br><span class="line"></span><br><span class="line">    InputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line">    FileOutputStream outputStream =<span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//定义文件访问的url地址</span></span><br><span class="line">    String url = <span class="string">"hdfs://192.168.52.100:8020/test/input/install.log"</span>;</span><br><span class="line">    <span class="comment">//打开文件输入流</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        inputStream = <span class="keyword">new</span> URL(url).openStream();</span><br><span class="line">        outputStream = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(<span class="string">"c:\\hello.txt"</span>));</span><br><span class="line">        IOUtils.copy(inputStream, outputStream);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        IOUtils.closeQuietly(inputStream);</span><br><span class="line">        IOUtils.closeQuietly(outputStream);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果执行出现以下错误，可以参见资料如何解决，也可以不用理会，不会影响程序的执行。记得配置完成环境变量之后重启开发工具</p>
+<h4 id="使用文件系统方式访问数据（掌握）"><a href="#使用文件系统方式访问数据（掌握）" class="headerlink" title="使用文件系统方式访问数据（掌握）"></a>使用文件系统方式访问数据（掌握）</h4><p>在 java 中操作 HDFS，主要涉及以下 <code>Class</code>：<br><code>Configuration</code>：该类的对象封转了客户端或者服务器的配置; <code>FileSystem</code>：该类的对象是一个文件系统对象，可以用该对象的一些方法来对文件进行操作，通过 <code>FileSystem</code> 的静态方法 <code>get</code> 获得该对象。<br><code>FileSystem fs = FileSystem.get(conf)</code><br>get 方法从 conf 中的一个参数 fs.defaultFS 的配置值判断具体是什么类型的文件系统。如果我们的代码中没有指定 fs.defaultFS，并且工程 classpath下也没有给定相应的配置，conf中的默认值就来自于hadoop的jar包中的core-default.xml ， 默 认 值 为 ： file:/// ， 则 获 取 的 将 不 是 一 个DistributedFileSystem 的实例，而是一个本地文件系统的客户端对象</p>
+<h4 id="获取FileSystem的几种方式"><a href="#获取FileSystem的几种方式" class="headerlink" title="获取FileSystem的几种方式"></a>获取FileSystem的几种方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">第一种方式获取FileSystem</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getFileSystem</span><span class="params">()</span> <span class="keyword">throws</span> URISyntaxException, IOException </span>&#123;</span><br><span class="line">   Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), configuration);</span><br><span class="line">    System.out.println(fileSystem.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">第二种获取FileSystem类的方式</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getFileSystem2</span><span class="params">()</span> <span class="keyword">throws</span> URISyntaxException, IOException </span>&#123;</span><br><span class="line">    Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line">    configuration.set(<span class="string">"fs.defaultFS"</span>,<span class="string">"hdfs://192.168.52.100:8020"</span>);</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"/"</span>), configuration);</span><br><span class="line">    System.out.println(fileSystem.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">第三种获取FileSystem类的方式</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getFileSystem3</span><span class="params">()</span> <span class="keyword">throws</span> URISyntaxException, IOException </span>&#123;</span><br><span class="line">    Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line">    FileSystem fileSystem = FileSystem.newInstance(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), configuration);</span><br><span class="line">    System.out.println(fileSystem.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">第四种获取FileSystem类的方式</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getFileSystem4</span><span class="params">()</span> <span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line">    configuration.set(<span class="string">"fs.defaultFS"</span>,<span class="string">"hdfs://192.168.52.100:8020"</span>);</span><br><span class="line">    FileSystem fileSystem = FileSystem.newInstance(configuration);</span><br><span class="line">    System.out.println(fileSystem.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="递归遍历文件系统当中的所有文件"><a href="#递归遍历文件系统当中的所有文件" class="headerlink" title="递归遍历文件系统当中的所有文件"></a>递归遍历文件系统当中的所有文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">通过递归遍历hdfs文件系统</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listFile</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration());</span><br><span class="line">    FileStatus[] fileStatuses = fileSystem.listStatus(<span class="keyword">new</span> Path(<span class="string">"/"</span>));</span><br><span class="line">    <span class="keyword">for</span> (FileStatus fileStatus : fileStatuses) &#123;</span><br><span class="line">        <span class="keyword">if</span>(fileStatus.isDirectory())&#123;</span><br><span class="line">            Path path = fileStatus.getPath();</span><br><span class="line">            listAllFiles(fileSystem,path);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"文件路径为"</span>+fileStatus.getPath().toString());</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listAllFiles</span><span class="params">(FileSystem fileSystem,Path path)</span> <span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    FileStatus[] fileStatuses = fileSystem.listStatus(path);</span><br><span class="line">    <span class="keyword">for</span> (FileStatus fileStatus : fileStatuses) &#123;</span><br><span class="line">        <span class="keyword">if</span>(fileStatus.isDirectory())&#123;</span><br><span class="line">            listAllFiles(fileSystem,fileStatus.getPath());</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Path path1 = fileStatus.getPath();</span><br><span class="line">            System.out.println(<span class="string">"文件路径为"</span>+path1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">官方提供的API直接遍历</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归遍历官方提供的API版本</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listMyFiles</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//获取fileSystem类</span></span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration());</span><br><span class="line">    <span class="comment">//获取RemoteIterator 得到所有的文件或者文件夹，第一个参数指定遍历的路径，第二个参数表示是否要递归遍历</span></span><br><span class="line">    RemoteIterator&lt;LocatedFileStatus&gt; locatedFileStatusRemoteIterator = fileSystem.listFiles(<span class="keyword">new</span> Path(<span class="string">"/"</span>), <span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">while</span> (locatedFileStatusRemoteIterator.hasNext())&#123;</span><br><span class="line">        LocatedFileStatus next = locatedFileStatusRemoteIterator.next();</span><br><span class="line">        System.out.println(next.getPath().toString());</span><br><span class="line">    &#125;</span><br><span class="line">    fileSystem.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="下载文件到本地"><a href="#下载文件到本地" class="headerlink" title="下载文件到本地"></a>下载文件到本地</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">程序执行的main方法</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 拷贝文件的到本地</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getFileToLocal</span><span class="params">()</span><span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration());</span><br><span class="line">    FSDataInputStream open = fileSystem.open(<span class="keyword">new</span> Path(<span class="string">"/test/input/install.log"</span>));</span><br><span class="line">    FileOutputStream fileOutputStream = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(<span class="string">"c:\\install.log"</span>));</span><br><span class="line">    IOUtils.copy(open,fileOutputStream );</span><br><span class="line">    IOUtils.closeQuietly(open);</span><br><span class="line">    IOUtils.closeQuietly(fileOutputStream);</span><br><span class="line">    fileSystem.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="hdfs上创建文件夹"><a href="#hdfs上创建文件夹" class="headerlink" title="hdfs上创建文件夹"></a>hdfs上创建文件夹</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mkdirs</span><span class="params">()</span> <span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration());</span><br><span class="line">    <span class="keyword">boolean</span> mkdirs = fileSystem.mkdirs(<span class="keyword">new</span> Path(<span class="string">"/hello/mydir/test"</span>));</span><br><span class="line">    fileSystem.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="hdfs文件上传"><a href="#hdfs文件上传" class="headerlink" title="hdfs文件上传"></a>hdfs文件上传</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putData</span><span class="params">()</span> <span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration());</span><br><span class="line">    fileSystem.copyFromLocalFile(<span class="keyword">new</span> Path(<span class="string">"file:///c:\\install.log"</span>),<span class="keyword">new</span> Path(<span class="string">"/hello/mydir/test"</span>));</span><br><span class="line">    fileSystem.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="HDFS权限问题以及伪造用户"><a href="#HDFS权限问题以及伪造用户" class="headerlink" title="HDFS权限问题以及伪造用户"></a>HDFS权限问题以及伪造用户</h4><p>首先停止hdfs集群，在node01机器上执行以下命令<br>cd /export/servers/hadoop-2.6.0-cdh5.14.0<br>sbin/stop-dfs.sh<br>修改node01机器上的hdfs-site.xml当中的配置文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /<span class="built_in">export</span>/servers/hadoop-2.6.0-cdh5.14.0/etc/hadoop</span><br><span class="line">vim hdfs-site.xml</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.permissions<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>修改完成之后配置文件发送到其他机器上面去<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp hdfs-site.xml node02:<span class="variable">$PWD</span></span><br><span class="line">scp hdfs-site.xml node03:<span class="variable">$PWD</span></span><br></pre></td></tr></table></figure></p>
+<p>重启hdfs集群<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /export/servers/hadoop-2.6.0-cdh5.14.0</span><br><span class="line">sbin/start-dfs.sh</span><br></pre></td></tr></table></figure></p>
+<p>随意上传一些文件到我们hadoop集群当中准备测试使用<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /export/servers/hadoop-2.6.0-cdh5.14.0/etc/hadoop</span><br><span class="line">hdfs dfs -mkdir /config</span><br><span class="line">hdfs dfs -put *.xml /config</span><br><span class="line">hdfs dfs -chmod 600 /config/core-site.xml</span><br></pre></td></tr></table></figure></p>
+<p>使用代码准备下载文件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getConfig</span><span class="params">()</span><span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration(),<span class="string">"root"</span>);</span><br><span class="line">    fileSystem.copyToLocalFile(<span class="keyword">new</span> Path(<span class="string">"/config/core-site.xml"</span>),<span class="keyword">new</span> Path(<span class="string">"file:///c:/core-site.xml"</span>));</span><br><span class="line">    fileSystem.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="HDFS的小文件合并"><a href="#HDFS的小文件合并" class="headerlink" title="HDFS的小文件合并"></a>HDFS的小文件合并</h4><p>由于hadoop擅长存储大文件，因为大文件的元数据信息比较少，如果hadoop集群当中有大量的小文件，那么每个小文件都需要维护一份元数据信息，会大大的增加集群管理元数据的内存压力，所以在实际工作当中，如果有必要一定要将小文件合并成大文件进行一起处理<br>在我们的hdfs 的shell命令模式下，可以通过命令行将很多的hdfs文件合并成一个大文件下载到本地，命令如下<br>cd /export/servers<br>hdfs dfs -getmerge /config/*.xml  ./hello.xml</p>
+<p>既然可以在下载的时候将这些小文件合并成一个大文件一起下载，那么肯定就可以在上传的时候将小文件合并到一个大文件里面去<br>代码如下：<br><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6gjbg5d75j30n20ea0tp.jpg" alt><br> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将多个本地系统文件，上传到hdfs，并合并成一个大的文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mergeFile</span><span class="params">()</span> <span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">    <span class="comment">//获取分布式文件系统</span></span><br><span class="line">    FileSystem fileSystem = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://192.168.52.100:8020"</span>), <span class="keyword">new</span> Configuration(),<span class="string">"root"</span>);</span><br><span class="line">    FSDataOutputStream outputStream = fileSystem.create(<span class="keyword">new</span> Path(<span class="string">"/bigfile.xml"</span>));</span><br><span class="line">    <span class="comment">//获取本地文件系统</span></span><br><span class="line">    LocalFileSystem local = FileSystem.getLocal(<span class="keyword">new</span> Configuration());</span><br><span class="line">    <span class="comment">//通过本地文件系统获取文件列表，为一个集合</span></span><br><span class="line">    FileStatus[] fileStatuses = local.listStatus(<span class="keyword">new</span> Path(<span class="string">"file:///F:\\传智播客大数据离线阶段课程资料\\3、大数据离线第三天\\上传小文件合并"</span>));</span><br><span class="line">    <span class="keyword">for</span> (FileStatus fileStatus : fileStatuses) &#123;</span><br><span class="line">        FSDataInputStream inputStream = local.open(fileStatus.getPath());</span><br><span class="line">       IOUtils.copy(inputStream,outputStream);</span><br><span class="line">        IOUtils.closeQuietly(inputStream);</span><br><span class="line">    &#125;</span><br><span class="line">    IOUtils.closeQuietly(outputStream);</span><br><span class="line">    local.close();</span><br><span class="line">    fileSystem.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/08/22/mapreduce/" title="mapreduce">
+                    <div class="nextTitle">mapreduce</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/08/19/createhive/" title="hive创建表、分区、分桶">
+                    <div class="prevTitle">hive创建表、分区、分桶</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQxMS8xNzk1OA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:web@mtman.site" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/qrcode.jpg">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//weibo.com/2261202055" class="iconfont-archer weibo" target="_blank" title="weibo"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/1418144" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hadoop的安装"><span class="toc-number">1.</span> <span class="toc-text">hadoop的安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hadoop的三大组件"><span class="toc-number">2.</span> <span class="toc-text">hadoop的三大组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HDFS"><span class="toc-number">2.1.</span> <span class="toc-text">HDFS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念"><span class="toc-number">2.1.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#namenode"><span class="toc-number">2.1.2.</span> <span class="toc-text">namenode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#namenode与datanode的关系"><span class="toc-number">2.1.3.</span> <span class="toc-text">namenode与datanode的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hdfs的架构之文件的文件副本机制"><span class="toc-number">2.1.4.</span> <span class="toc-text">hdfs的架构之文件的文件副本机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hdfs的架构之文件的文件副本机制以及block块存储"><span class="toc-number">2.1.4.1.</span> <span class="toc-text">hdfs的架构之文件的文件副本机制以及block块存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#抽象成数据块的好处"><span class="toc-number">2.1.4.2.</span> <span class="toc-text">抽象成数据块的好处</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#块缓存"><span class="toc-number">2.1.4.3.</span> <span class="toc-text">块缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hdfs的文件权限验证"><span class="toc-number">2.1.4.4.</span> <span class="toc-text">hdfs的文件权限验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS的元数据信息"><span class="toc-number">2.1.5.</span> <span class="toc-text">HDFS的元数据信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS的元数据信息FSimage以及edits和secondaryNN的作用"><span class="toc-number">2.1.5.1.</span> <span class="toc-text">HDFS的元数据信息FSimage以及edits和secondaryNN的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FSImage与edits详解"><span class="toc-number">2.1.5.2.</span> <span class="toc-text">FSImage与edits详解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FSimage文件当中的文件信息查看"><span class="toc-number">2.1.5.3.</span> <span class="toc-text">FSimage文件当中的文件信息查看</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#edits当中的文件信息查看"><span class="toc-number">2.1.5.4.</span> <span class="toc-text">edits当中的文件信息查看</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#secondarynameNode如何辅助管理FSImage与Edits文件"><span class="toc-number">2.1.5.5.</span> <span class="toc-text">secondarynameNode如何辅助管理FSImage与Edits文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS的文件写入过程"><span class="toc-number">2.1.6.</span> <span class="toc-text">HDFS的文件写入过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS的API操作"><span class="toc-number">2.1.7.</span> <span class="toc-text">HDFS的API操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建maven工程并导入jar包"><span class="toc-number">2.1.7.1.</span> <span class="toc-text">创建maven工程并导入jar包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用url的方式访问数据（了解）"><span class="toc-number">2.1.7.2.</span> <span class="toc-text">使用url的方式访问数据（了解）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用文件系统方式访问数据（掌握）"><span class="toc-number">2.1.7.3.</span> <span class="toc-text">使用文件系统方式访问数据（掌握）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取FileSystem的几种方式"><span class="toc-number">2.1.7.4.</span> <span class="toc-text">获取FileSystem的几种方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#递归遍历文件系统当中的所有文件"><span class="toc-number">2.1.7.5.</span> <span class="toc-text">递归遍历文件系统当中的所有文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载文件到本地"><span class="toc-number">2.1.7.6.</span> <span class="toc-text">下载文件到本地</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hdfs上创建文件夹"><span class="toc-number">2.1.7.7.</span> <span class="toc-text">hdfs上创建文件夹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hdfs文件上传"><span class="toc-number">2.1.7.8.</span> <span class="toc-text">hdfs文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS权限问题以及伪造用户"><span class="toc-number">2.1.7.9.</span> <span class="toc-text">HDFS权限问题以及伪造用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS的小文件合并"><span class="toc-number">2.1.7.10.</span> <span class="toc-text">HDFS的小文件合并</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 27
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive5/">hive5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive1/">Hive基本概念</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive2/">Hive Shell参数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive3/">Hive函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/dw/">data warehouse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive4/">hive数据压缩与存储</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href="/2019/08/27/sqoop/">sqoop</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/zookeeper/">zookeeper</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/mapreduce/">mapreduce</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/yarn/">yarn</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/hadoop/">hadoop与hdfs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/Hbase/">Hbase</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span><a class="archive-post-title" href="/2019/08/19/createhive/">hive创建表、分区、分桶</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day12/">with open</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day10/">TCP/IP和UDP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day11/">tcp与udp的比较</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span><a class="archive-post-title" href="/2019/05/23/day9/">网络通信</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day8/">面向对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day7/">闭包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day4/">生成器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day2/">python函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/05</span><a class="archive-post-title" href="/2019/01/05/dbknowledge/">数据库理论基础</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href="/2018/12/01/bigdata/">大数据课程中的算法</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="hadoop"><span class="iconfont-archer">&#xe606;</span>hadoop</span>
+    
+        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
+    
+        <span class="sidebar-tag-name" data-tags="大数据"><span class="iconfont-archer">&#xe606;</span>大数据</span>
+    
+        <span class="sidebar-tag-name" data-tags="bigdata"><span class="iconfont-archer">&#xe606;</span>bigdata</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
+    
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
+    
+        <span class="sidebar-tag-name" data-tags="yarn"><span class="iconfont-archer">&#xe606;</span>yarn</span>
+    
+        <span class="sidebar-tag-name" data-tags="数据仓库"><span class="iconfont-archer">&#xe606;</span>数据仓库</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
+    
+        <span class="sidebar-tag-name" data-tags="HDFS"><span class="iconfont-archer">&#xe606;</span>HDFS</span>
+    
+        <span class="sidebar-tag-name" data-tags="mapreduce"><span class="iconfont-archer">&#xe606;</span>mapreduce</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

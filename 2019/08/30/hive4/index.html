@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+    <meta name="keywords" content="山林,小生,uno,mtman,山林小生">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>hive数据压缩与存储 · llluno</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon-1.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mtman&#39;s note.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">hive数据压缩与存储</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mtman's note.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            hive数据压缩与存储
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="hadoop">hadoop</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="大数据">大数据</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="bigdata">bigdata</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="hive">hive</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.8k</span>阅读时长: <span class="post-count reading-time">11 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/08/30</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="hive的数据压缩"><a href="#hive的数据压缩" class="headerlink" title="hive的数据压缩"></a>hive的数据压缩</h1><p>在实际工作当中，hive当中处理的数据，一般都需要经过压缩，前期我们在学习hadoop的时候，已经配置过hadoop的压缩，我们这里的hive也是一样的可以使用压缩来节省我们的MR处理的网络带宽</p>
+<h2 id="MR支持的压缩编码"><a href="#MR支持的压缩编码" class="headerlink" title="MR支持的压缩编码"></a>MR支持的压缩编码</h2><table>
+<thead>
+<tr>
+<th>压缩格式</th>
+<th>工具</th>
+<th>算法</th>
+<th>文件扩展名</th>
+<th>是否可切分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEFAULT</td>
+<td>无</td>
+<td>DEFAULT</td>
+<td>.deflate</td>
+<td>否</td>
+</tr>
+<tr>
+<td>Gzip</td>
+<td>gzip</td>
+<td>DEFAULT</td>
+<td>.gz</td>
+<td>否</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>bzip2</td>
+<td>bzip2</td>
+<td>.bz2</td>
+<td>是</td>
+</tr>
+<tr>
+<td>LZO</td>
+<td>lzop</td>
+<td>LZO</td>
+<td>.lzo</td>
+<td>否</td>
+</tr>
+<tr>
+<td>LZ4</td>
+<td>无</td>
+<td>LZ4</td>
+<td>.lz4</td>
+<td>否</td>
+</tr>
+<tr>
+<td>Snappy</td>
+<td>无</td>
+<td>Snappy</td>
+<td>.snappy</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>为了支持多种压缩/解压缩算法，Hadoop引入了编码/解码器，如下表所示</p>
+<table>
+<thead>
+<tr>
+<th>压缩格式</th>
+<th>对应的编码/解码器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEFLATE</td>
+<td>org.apache.hadoop.io.compress.DefaultCodec</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>org.apache.hadoop.io.compress.GzipCodec</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>org.apache.hadoop.io.compress.BZip2Codec</td>
+</tr>
+<tr>
+<td>LZO</td>
+<td>com.hadoop.compression.lzo.LzopCodec</td>
+</tr>
+<tr>
+<td>LZ4</td>
+<td>org.apache.hadoop.io.compress.Lz4Codec</td>
+</tr>
+<tr>
+<td>Snappy</td>
+<td>org.apache.hadoop.io.compress.SnappyCodec</td>
+</tr>
+</tbody>
+</table>
+<p>压缩性能的比较</p>
+<table>
+<thead>
+<tr>
+<th>压缩算法</th>
+<th>原始文件大小</th>
+<th>压缩文件大小</th>
+<th>压缩速度</th>
+<th>解压速度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gzip</td>
+<td>8.3GB</td>
+<td>1.8GB</td>
+<td>17.5MB/s</td>
+<td>58MB/s</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>8.3GB</td>
+<td>1.1GB</td>
+<td>2.4MB/s</td>
+<td>9.5MB/s</td>
+</tr>
+<tr>
+<td>LZO</td>
+<td>8.3GB</td>
+<td>2.9GB</td>
+<td>49.3MB/s</td>
+<td>74.6MB/s</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://google.github.io/snappy/" target="_blank" rel="noopener">http://google.github.io/snappy/</a><br>On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.</p>
+<h2 id="压缩配置参数"><a href="#压缩配置参数" class="headerlink" title="压缩配置参数"></a>压缩配置参数</h2><p>要在Hadoop中启用压缩，可以配置如下参数（mapred-site.xml文件中）：</p>
+<p>参数|    默认值|    阶段|    建议</p>
+<blockquote>
+<p>io.compression.codecs   （在core-site.xml中配置）|    org.apache.hadoop.io.compress.DefaultCodec，org.apache.hadoop.io.compress.GzipCodec, org.apache.hadoop.io.compress.BZip2Codec,org.apache.hadoop.io.compress.Lz4Codec|    输入压缩|    Hadoop使用文件扩展名判断是否支持某种编解码器</p>
+</blockquote>
+<blockquote>
+<p>mapreduce.map.output.compress|    false|    mapper输出|    这个参数设为true启用压缩</p>
+</blockquote>
+<blockquote>
+<p>mapreduce.map.output.compress.codec|    org.apache.hadoop.io.compress.DefaultCodec|    mapper输出|    使用LZO、LZ4或snappy编解码器在此阶段压缩数据</p>
+</blockquote>
+<blockquote>
+<p>mapreduce.output.fileoutputformat.compress|    false|    reducer输出|    这个参数设为true启用压缩</p>
+</blockquote>
+<blockquote>
+<p>mapreduce.output.fileoutputformat.compress.codec    |org.apache.hadoop.io.compress. DefaultCodec    |reducer输出|    使用标准工具或者编解码器，如gzip和bzip2</p>
+</blockquote>
+<blockquote>
+<p>mapreduce.output.fileoutputformat.compress.type|    RECORD|    reducer输出|SequenceFile输出使用的压缩类型：NONE和BLOCK</p>
+</blockquote>
+<h2 id="开启Map输出阶段压缩"><a href="#开启Map输出阶段压缩" class="headerlink" title="开启Map输出阶段压缩"></a>开启Map输出阶段压缩</h2><p>开启map输出阶段压缩可以减少job中map和Reduce task间数据传输量。具体配置如下：<br>案例实操：<br>    1）开启hive中间传输数据压缩功能<br><code>hive (default)&gt;set hive.exec.compress.intermediate=true;</code><br>2）开启mapreduce中map输出压缩功能<br><code>hive (default)&gt;set mapreduce.map.output.compress=true;</code><br>3）设置mapreduce中map输出数据的压缩方式<br><code>hive (default)&gt;set mapreduce.map.output.compress.codec= org.apache.hadoop.io.compress.SnappyCodec;</code><br>4）执行查询语句<br><code>select count(1) from score;</code></p>
+<h2 id="开启Reduce输出阶段压缩"><a href="#开启Reduce输出阶段压缩" class="headerlink" title="开启Reduce输出阶段压缩"></a>开启Reduce输出阶段压缩</h2><p>当Hive将输出写入到表中时，输出内容同样可以进行压缩。属性hive.exec.compress.output控制着这个功能。用户可能需要保持默认设置文件中的默认值false，这样默认的输出就是非压缩的纯文本文件了。用户可以通过在查询语句或执行脚本中设置这个值为true，来开启输出结果压缩功能。<br>案例实操：<br>1）开启hive最终输出数据压缩功能<br><code>hive (default)&gt;set hive.exec.compress.output=true;</code><br>2）开启mapreduce最终输出数据压缩<br><code>hive (default)&gt;set mapreduce.output.fileoutputformat.compress=true;</code><br>3）设置mapreduce最终数据输出压缩方式<br><code>hive (default)&gt; set mapreduce.output.fileoutputformat.compress.codec = org.apache.hadoop.io.compress.SnappyCodec;</code><br>4）设置mapreduce最终数据输出压缩为块压缩<br><code>hive (default)&gt;set mapreduce.output.fileoutputformat.compress.type=BLOCK;</code><br>5）测试一下输出结果是否是压缩文件<br><code>insert overwrite local directory &#39;/export/servers/snappy&#39; select * from score distribute by s_id sort by s_id desc;</code></p>
+<h1 id="hive的数据存储格式"><a href="#hive的数据存储格式" class="headerlink" title="hive的数据存储格式"></a>hive的数据存储格式</h1><p>Hive支持的存储数的格式主要有：TEXTFILE（行式存储） 、SEQUENCEFILE(行式存储)、ORC（列式存储）、PARQUET（列式存储）。</p>
+<h2 id="列式存储和行式存储"><a href="#列式存储和行式存储" class="headerlink" title="列式存储和行式存储"></a>列式存储和行式存储</h2><p> <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6hpcx8m4jj30n208kjsl.jpg" alt><br>上图左边为逻辑表，右边第一个为行式存储，第二个为列式存储。<br>行存储的特点： 查询满足条件的一整行数据的时候，列存储则需要去每个聚集的字段找到对应的每个列的值，行存储只需要找到其中一个值，其余的值都在相邻地方，所以此时行存储查询的速度更快。<br>列存储的特点： 因为每个字段的数据聚集存储，在查询只需要少数几个字段的时候，能大大减少读取的数据量；每个字段的数据类型一定是相同的，列式存储可以针对性的设计更好的设计压缩算法。<br>TEXTFILE和SEQUENCEFILE的存储格式都是基于行存储的；<br>ORC和PARQUET是基于列式存储的。</p>
+<h2 id="TEXTFILE格式"><a href="#TEXTFILE格式" class="headerlink" title="TEXTFILE格式"></a>TEXTFILE格式</h2><p>默认格式，数据不做压缩，磁盘开销大，数据解析开销大。可结合Gzip、Bzip2使用(系统自动检查，执行查询时自动解压)，但使用这种方式，hive不会对数据进行切分，从而无法对数据进行并行操作。</p>
+<h2 id="ORC格式"><a href="#ORC格式" class="headerlink" title="ORC格式"></a>ORC格式</h2><p>Orc (Optimized Row Columnar)是hive 0.11版里引入的新的存储格式。<br>可以看到每个Orc文件由1个或多个stripe组成，每个stripe250MB大小，这个Stripe实际相当于RowGroup概念，不过大小由4MB-&gt;250MB，这样能提升顺序读的吞吐率。每个Stripe里有三部分组成，分别是Index Data,Row Data,Stripe Footer：<br> <img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6hpd92sx6j30gw0n0wgn.jpg" alt><br>一个orc文件可以分为若干个Stripe<br>一个stripe可以分为三个部分<br>indexData：某些列的索引数据<br>rowData :真正的数据存储<br>StripFooter：stripe的元数据信息<br>   1）Index Data：一个轻量级的index，默认是每隔1W行做一个索引。这里做的索引只是记录某行的各字段在Row Data中的offset。<br>    2）Row Data：存的是具体的数据，先取部分行，然后对这些行按列进行存储。对每个列进行了编码，分成多个Stream来存储。<br>    3）Stripe Footer：存的是各个stripe的元数据信息<br>每个文件有一个File Footer，这里面存的是每个Stripe的行数，每个Column的数据类型信息等；每个文件的尾部是一个PostScript，这里面记录了整个文件的压缩类型以及FileFooter的长度信息等。在读取文件时，会seek到文件尾部读PostScript，从里面解析到File Footer长度，再读FileFooter，从里面解析到各个Stripe信息，再读各个Stripe，即从后往前读。</p>
+<h2 id="PARQUET格式"><a href="#PARQUET格式" class="headerlink" title="PARQUET格式"></a>PARQUET格式</h2><p>Parquet是面向分析型业务的列式存储格式，由Twitter和Cloudera合作开发，2015年5月从Apache的孵化器里毕业成为Apache顶级项目。<br>Parquet文件是以二进制方式存储的，所以是不可以直接读取的，文件中包括该文件的数据和元数据，因此Parquet格式文件是自解析的。<br>通常情况下，在存储Parquet数据的时候会按照Block大小设置行组的大小，由于一般情况下每一个Mapper任务处理数据的最小单位是一个Block，这样可以把每一个行组由一个Mapper任务处理，增大任务执行并行度。Parquet文件的格式如下图所示。</p>
+<p>上图展示了一个Parquet文件的内容，一个文件中可以存储多个行组，文件的首位都是该文件的Magic Code，用于校验它是否是一个Parquet文件，Footer length记录了文件元数据的大小，通过该值和文件长度可以计算出元数据的偏移量，文件的元数据中包括每一个行组的元数据信息和该文件存储数据的Schema信息。除了文件中每一个行组的元数据，每一页的开始都会存储该页的元数据，在Parquet中，有三种类型的页：数据页、字典页和索引页。数据页用于存储当前行组中该列的值，字典页存储该列值的编码字典，每一个列块中最多包含一个字典页，索引页用来存储当前行组下该列的索引，目前Parquet中还不支持索引页。</p>
+<h2 id="主流文件存储格式对比实验"><a href="#主流文件存储格式对比实验" class="headerlink" title="主流文件存储格式对比实验"></a>主流文件存储格式对比实验</h2><p>从存储文件的压缩比和查询速度两个角度对比。<br>存储文件的压缩比测试：<br>0）测试数据 参见log.data</p>
+<p>1）TextFile<br>（1）创建表，存储数据格式为TEXTFILE<br>create table log_text (<br>track_time string,<br>url string,<br>session_id string,<br>referer string,<br>ip string,<br>end_user_id string,<br>city_id string<br>)<br>ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\t’<br>STORED AS TEXTFILE ;<br>（2）向表中加载数据<br>load data local inpath ‘/export/servers/hivedatas/log.data’ into table log_text ;<br>（3）查看表中数据大小<br>dfs -du -h /user/hive/warehouse/myhive.db/log_text;</p>
+<p>18.1 M  /user/hive/warehouse/log_text/log.data<br>2）ORC<br>    （1）创建表，存储数据格式为ORC<br>create table log_orc(<br>track_time string,<br>url string,<br>session_id string,<br>referer string,<br>ip string,<br>end_user_id string,<br>city_id string<br>)<br>ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\t’<br>STORED AS orc ;<br>（2）向表中加载数据<br>insert into table log_orc select <em> from log_text ;<br>（3）查看表中数据大小<br>dfs -du -h /user/hive/warehouse/myhive.db/log_orc;<br>2.8 M  /user/hive/warehouse/log_orc/123456_0<br>3）Parquet<br>    （1）创建表，存储数据格式为parquet<br>create table log_parquet(<br>track_time string,<br>url string,<br>session_id string,<br>referer string,<br>ip string,<br>end_user_id string,<br>city_id string<br>)<br>ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\t’<br>STORED AS PARQUET ;<br>（2）向表中加载数据<br>insert into table log_parquet select </em> from log_text ;<br>（3）查看表中数据大小<br>dfs -du -h /user/hive/warehouse/myhive.db/log_parquet;<br>13.1 M  /user/hive/warehouse/log_parquet/123456_0<br>存储文件的压缩比总结：<br>ORC &gt;  Parquet &gt;  textFile<br>存储文件的查询速度测试：<br>1）TextFile<br>hive (default)&gt; select count(<em>) from log_text;<br>_c0<br>100000<br>Time taken: 21.54 seconds, Fetched: 1 row(s)<br>2）ORC<br>hive (default)&gt; select count(</em>) from log_orc;<br>_c0<br>100000<br>Time taken: 20.867 seconds, Fetched: 1 row(s)<br>3）Parquet<br>hive (default)&gt; select count(*) from log_parquet;<br>_c0<br>100000<br>Time taken: 22.922 seconds, Fetched: 1 row(s)<br>存储文件的查询速度总结：<br>    ORC &gt; TextFile &gt; Parquet</p>
+<h1 id="存储和压缩结合"><a href="#存储和压缩结合" class="headerlink" title="存储和压缩结合"></a>存储和压缩结合</h1><p>官网：<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC</a><br>ORC存储方式的压缩：<br>Key|    Default|    Notes<br>-|-|-<br>orc.compress|    ZLIB|    high level compression (one of NONE, ZLIB, SNAPPY)<br>orc.compress.size|    262,144|    number of bytes in each compression chunk<br>orc.stripe.size    |67,108,864    |number of bytes in each stripe<br>orc.row.index.stride|    10,000|    number of rows between index entries (must be &gt;= 1000)<br>orc.create.index|    true|    whether to create row indexes<br>orc.bloom.filter.columns|    “”|    comma separated list of column names for which bloom filter should be created<br>orc.bloom.filter.fpp|    0.05|    false positive probability for bloom filter (must &gt;0.0 and &lt;1.0)<br>1）创建一个非压缩的的ORC存储方式<br>    （1）建表语句<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> log_orc_none(</span><br><span class="line">track_time <span class="keyword">string</span>,</span><br><span class="line"><span class="keyword">url</span> <span class="keyword">string</span>,</span><br><span class="line">session_id <span class="keyword">string</span>,</span><br><span class="line">referer <span class="keyword">string</span>,</span><br><span class="line">ip <span class="keyword">string</span>,</span><br><span class="line">end_user_id <span class="keyword">string</span>,</span><br><span class="line">city_id <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span></span><br><span class="line"><span class="keyword">STORED</span> <span class="keyword">AS</span> orc tblproperties (<span class="string">"orc.compress"</span>=<span class="string">"NONE"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>（2）插入数据<br><code>insert into table log_orc_none select * from log_text ;</code><br>（3）查看插入后数据<br><code>dfs -du -h /user/hive/warehouse/myhive.db/log_orc_none;</code><br><code>7.7 M  /user/hive/warehouse/log_orc_none/123456_0</code><br>2）创建一个SNAPPY压缩的ORC存储方式<br>    （1）建表语句<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> log_orc_snappy(</span><br><span class="line">track_time <span class="keyword">string</span>,</span><br><span class="line"><span class="keyword">url</span> <span class="keyword">string</span>,</span><br><span class="line">session_id <span class="keyword">string</span>,</span><br><span class="line">referer <span class="keyword">string</span>,</span><br><span class="line">ip <span class="keyword">string</span>,</span><br><span class="line">end_user_id <span class="keyword">string</span>,</span><br><span class="line">city_id <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span></span><br><span class="line"><span class="keyword">STORED</span> <span class="keyword">AS</span> orc tblproperties (<span class="string">"orc.compress"</span>=<span class="string">"SNAPPY"</span>);</span><br></pre></td></tr></table></figure></p>
+<pre><code>（2）插入数据
+</code></pre><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> log_orc_snappy <span class="keyword">select</span> * <span class="keyword">from</span> log_text ;</span><br></pre></td></tr></table></figure>
+<pre><code>（3）查看插入后数据
+</code></pre><p><code>dfs -du -h /user/hive/warehouse/myhive.db/log_orc_snappy ;</code><br><code>3.8 M  /user/hive/warehouse/log_orc_snappy/123456_0</code><br>3）上一节中默认创建的ORC存储方式，导入数据后的大小为<br><code>2.8 M  /user/hive/warehouse/log_orc/123456_0</code><br>比Snappy压缩的还小。原因是orc存储文件默认采用ZLIB压缩。比snappy压缩的小。<br>4）存储方式和压缩总结：<br>    在实际的项目开发当中，hive表的数据存储格式一般选择：orc或parquet。压缩方式一般选择snappy。</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/08/30/hive5/" title="hive5">
+                    <div class="nextTitle">hive5</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/08/30/hive3/" title="Hive函数">
+                    <div class="prevTitle">Hive函数</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQxMS8xNzk1OA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:web@mtman.site" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/qrcode.jpg">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//weibo.com/2261202055" class="iconfont-archer weibo" target="_blank" title="weibo"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/1418144" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hive的数据压缩"><span class="toc-number">1.</span> <span class="toc-text">hive的数据压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MR支持的压缩编码"><span class="toc-number">1.1.</span> <span class="toc-text">MR支持的压缩编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#压缩配置参数"><span class="toc-number">1.2.</span> <span class="toc-text">压缩配置参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启Map输出阶段压缩"><span class="toc-number">1.3.</span> <span class="toc-text">开启Map输出阶段压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启Reduce输出阶段压缩"><span class="toc-number">1.4.</span> <span class="toc-text">开启Reduce输出阶段压缩</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hive的数据存储格式"><span class="toc-number">2.</span> <span class="toc-text">hive的数据存储格式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#列式存储和行式存储"><span class="toc-number">2.1.</span> <span class="toc-text">列式存储和行式存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEXTFILE格式"><span class="toc-number">2.2.</span> <span class="toc-text">TEXTFILE格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ORC格式"><span class="toc-number">2.3.</span> <span class="toc-text">ORC格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PARQUET格式"><span class="toc-number">2.4.</span> <span class="toc-text">PARQUET格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主流文件存储格式对比实验"><span class="toc-number">2.5.</span> <span class="toc-text">主流文件存储格式对比实验</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#存储和压缩结合"><span class="toc-number">3.</span> <span class="toc-text">存储和压缩结合</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 27
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive5/">hive5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive1/">Hive基本概念</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive2/">Hive Shell参数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive3/">Hive函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/dw/">data warehouse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive4/">hive数据压缩与存储</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href="/2019/08/27/sqoop/">sqoop</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/zookeeper/">zookeeper</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/mapreduce/">mapreduce</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/yarn/">yarn</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/hadoop/">hadoop与hdfs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/Hbase/">Hbase</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span><a class="archive-post-title" href="/2019/08/19/createhive/">hive创建表、分区、分桶</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day12/">with open</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day10/">TCP/IP和UDP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day11/">tcp与udp的比较</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span><a class="archive-post-title" href="/2019/05/23/day9/">网络通信</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day8/">面向对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day7/">闭包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day4/">生成器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day2/">python函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/05</span><a class="archive-post-title" href="/2019/01/05/dbknowledge/">数据库理论基础</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href="/2018/12/01/bigdata/">大数据课程中的算法</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="hadoop"><span class="iconfont-archer">&#xe606;</span>hadoop</span>
+    
+        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
+    
+        <span class="sidebar-tag-name" data-tags="大数据"><span class="iconfont-archer">&#xe606;</span>大数据</span>
+    
+        <span class="sidebar-tag-name" data-tags="bigdata"><span class="iconfont-archer">&#xe606;</span>bigdata</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
+    
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
+    
+        <span class="sidebar-tag-name" data-tags="yarn"><span class="iconfont-archer">&#xe606;</span>yarn</span>
+    
+        <span class="sidebar-tag-name" data-tags="数据仓库"><span class="iconfont-archer">&#xe606;</span>数据仓库</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
+    
+        <span class="sidebar-tag-name" data-tags="HDFS"><span class="iconfont-archer">&#xe606;</span>HDFS</span>
+    
+        <span class="sidebar-tag-name" data-tags="mapreduce"><span class="iconfont-archer">&#xe606;</span>mapreduce</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
