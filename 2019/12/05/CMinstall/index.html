@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+    <meta name="keywords" content="山林,小生,uno,mtman,山林小生">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>CM6及CDH的安装 · llluno</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon-1.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mtman&#39;s note.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">CM6及CDH的安装</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mtman's note.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            CM6及CDH的安装
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="bigdata">bigdata</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="大数据">大数据</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="CDH">CDH</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3.5k</span>阅读时长: <span class="post-count reading-time">15 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/12/05</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>官方文档：<a href="https://docs.cloudera.com/documentation/enterprise/6/6.3/topics/installation.html" target="_blank" rel="noopener">https://docs.cloudera.com/documentation/enterprise/6/6.3/topics/installation.html</a></p>
+<h1 id="安装前准备"><a href="#安装前准备" class="headerlink" title="安装前准备"></a>安装前准备</h1><h2 id="设置hostname"><a href="#设置hostname" class="headerlink" title="设置hostname"></a>设置hostname</h2><p>每个主机的规范名称 / etc / hosts文件 必须是FQDN（例如myhost-1.example.com），而不是不合格的主机名（例如 为myhost-1）。确保hostname一致。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@node01 ~]<span class="comment"># cat /etc/hosts</span></span><br><span class="line">127.0.0.1 localhost</span><br><span class="line">::1 localhost</span><br><span class="line"></span><br><span class="line">172.18.21.61 node01.bigdata.hex.com node01</span><br><span class="line">172.18.21.62 node02.bigdata.hex.com node02</span><br><span class="line">172.18.21.63 node03.bigdata.hex.com node03</span><br><span class="line"></span><br><span class="line">[root@node01 ~]<span class="comment"># hostname</span></span><br><span class="line">node01.bigdata.hex.com</span><br></pre></td></tr></table></figure></p>
+<h2 id="禁用防火墙和selinux"><a href="#禁用防火墙和selinux" class="headerlink" title="禁用防火墙和selinux"></a>禁用防火墙和selinux</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">systemctl list-unit-files |grep fire <span class="comment"># 查看防火墙开机启动状态</span></span><br><span class="line">firewall-cmd --state <span class="comment"># 查看防火墙状态</span></span><br><span class="line">systemctl stop firewalld <span class="comment"># 关闭</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld  <span class="comment"># 禁止开机启动</span></span><br><span class="line"></span><br><span class="line">getenforce  <span class="comment"># 检查SELinux状态</span></span><br><span class="line">setenforce 0 <span class="comment"># （临时修改）</span></span><br><span class="line"><span class="comment"># 修改 /etc/selinux/config 下的 SELINUX=disabled （重启后永久生效）</span></span><br></pre></td></tr></table></figure>
+<h2 id="启用NTP"><a href="#启用NTP" class="headerlink" title="启用NTP"></a>启用NTP</h2><p>CDH要求您在群集中的每台计算机上配置网络时间协议（NTP）服务。要启动NTP并将其配置为在重新引导时自动运行，请在群集中的每个节点上执行以下步骤。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">yum install ntp</span><br><span class="line"><span class="comment"># 编辑/etc/ntp.conf文件以添加NTP服务器</span></span><br><span class="line">restrict 172.18.0.0 mask 255.255.240.0 nomodify notrap</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国这边最活跃的时间服务器 : http://www.pool.ntp.org/zone/cn</span></span><br><span class="line">server 210.72.145.44 perfer   <span class="comment"># 中国国家受时中心</span></span><br><span class="line">server 202.112.10.36     <span class="comment"># 1.cn.pool.ntp.org</span></span><br><span class="line">server 59.124.196.83             <span class="comment"># 0.asia.pool.ntp.org</span></span><br><span class="line"></span><br><span class="line">server 127.127.1.0 iburst</span><br><span class="line">fudge 127.127.1.0 stratum 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 其他节点上编辑/etc/ntp.conf文件以添加NTP服务器</span></span><br><span class="line">server 172.18.21.61</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务：</span></span><br><span class="line">systemctl start ntpd</span><br><span class="line"><span class="comment"># 配置开机启动：</span></span><br><span class="line">systemctl <span class="built_in">enable</span> ntpd</span><br><span class="line"><span class="comment"># 主节点手动同步网络时间：</span></span><br><span class="line">ntpdate -u 210.72.145.44 <span class="comment"># 中国国家受时中心</span></span><br><span class="line"><span class="comment"># 其他节点手动同步主节点：</span></span><br><span class="line">ntpdate -u 172.18.21.61 <span class="comment">#主节点IP</span></span><br><span class="line"><span class="comment"># 同步系统时钟（以防止同步问题）：</span></span><br><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure></p>
+<h2 id="关闭透明大页面"><a href="#关闭透明大页面" class="headerlink" title="关闭透明大页面"></a>关闭透明大页面</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> never &gt; /sys/kernel/mm/transparent_hugepage/defrag</span><br><span class="line"><span class="built_in">echo</span> never &gt; /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line"><span class="comment"># 将这两条命令添加到/etc/rc.local中</span></span><br></pre></td></tr></table></figure>
+<h1 id="安装Cloudera-Manager和CDH"><a href="#安装Cloudera-Manager和CDH" class="headerlink" title="安装Cloudera Manager和CDH"></a>安装Cloudera Manager和CDH</h1><h2 id="配置本地yum库"><a href="#配置本地yum库" class="headerlink" title="配置本地yum库"></a>配置本地yum库</h2><h3 id="下载CM的repo资源"><a href="#下载CM的repo资源" class="headerlink" title="下载CM的repo资源"></a>下载CM的repo资源</h3><p><a href="https://archive.cloudera.com/cm6/6.3.1/redhat7/yum/RPMS/x86_64/" target="_blank" rel="noopener">https://archive.cloudera.com/cm6/6.3.1/redhat7/yum/RPMS/x86_64/</a><br>下载到http服务的文件夹<code>/var/www/html/cloudera/CM/6.3.1/</code>下</p>
+<h3 id="下载CDH的parcels资源"><a href="#下载CDH的parcels资源" class="headerlink" title="下载CDH的parcels资源"></a>下载CDH的parcels资源</h3><p>下载对应系统的资源到<code>/var/www/html/cloudera/CDH/</code>下</p>
+<h3 id="配置yum资源"><a href="#配置yum资源" class="headerlink" title="配置yum资源"></a>配置yum资源</h3><p>Cloudera Manager资源的yum配置文件：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/yum.repos.d/cloudera-manager.repo</span><br><span class="line">[cloudera-manager]</span><br><span class="line">name = Cloudera Manager, Version 6.3.1</span><br><span class="line">baseurl = http://172.18.21.61/cloudera/CM/6.3.1/</span><br><span class="line">gpgcheck = 0</span><br></pre></td></tr></table></figure></p>
+<p>Linux OS资源的yum配置文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/yum.repos.d/ linux-os.repo</span><br><span class="line">[linux-os]</span><br><span class="line">name= linux-os6</span><br><span class="line">baseurl= http://172.18.21.61/redhat </span><br><span class="line"><span class="comment">#资源目录/var/www/html/下</span></span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure></p>
+<h3 id="生成repodata资源"><a href="#生成repodata资源" class="headerlink" title="生成repodata资源"></a>生成repodata资源</h3><p>先将<code>allkey.asc</code>下载到<code>/var/www/html/cloudera/CM/6.3.1/</code>下<br><a href="https://archive.cloudera.com/cm6/6.3.1/allkeys.asc" target="_blank" rel="noopener">https://archive.cloudera.com/cm6/6.3.1/allkeys.asc</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum repolist</span><br><span class="line">yum -y install createrepo	<span class="comment">#安装createrepo，需要用到系统库</span></span><br><span class="line"><span class="built_in">cd</span> /var/www/html/cloudera/CM/6.3.1</span><br><span class="line">createrepo 			<span class="comment">#读取repodata/repomd.xml文件生成校验文件</span></span><br><span class="line">yum clean all</span><br></pre></td></tr></table></figure>
+<h2 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h2><p>要安装Oracle JDK，可以使用ClouderaManager安装Cloudera提供的版本，也可以直接安装Oracle的其他版本。<br>要求：</p>
+<ul>
+<li>JDK必须是64位。不要使用32位JDK。</li>
+<li>已安装的JDK必须是受支持的版本</li>
+<li>在相同版本的JDK的Oracle必须安装在每个群集主机上</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install oracle-j2sdk1.8</span><br></pre></td></tr></table></figure>
+<h2 id="安装Cloudera-Manager-Server"><a href="#安装Cloudera-Manager-Server" class="headerlink" title="安装Cloudera Manager Server"></a>安装Cloudera Manager Server</h2><p>在Cloudera Manager Server主机上，键入以下命令以安装Cloudera Manager软件包<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install cloudera-manager-daemons cloudera-manager-agent cloudera-manager-server</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装和配置数据库"><a href="#安装和配置数据库" class="headerlink" title="安装和配置数据库"></a>安装和配置数据库</h2><p>Cloudera Manager使用各种数据库和数据存储来存储有关Cloudera Manager配置的信息，以及诸如系统运行状况或任务进度之类的信息。</p>
+<p>虽然您可以在单个环境中部署不同类型的数据库，但这样做会产生意外的复杂情况。Cloudera建议为所有Cloudera数据库选择一个受支持的数据库提供程序。</p>
+<p>Cloudera建议在不同于服务的主机上安装数据库。将数据库与服务分离可以帮助隔离一个或另一个中的故障或资源争用的潜在影响。它还可以简化具有专用数据库管理员的组织的管理。</p>
+<p>我们可以将自己的PostgreSQL，MariaDB，MySQL或Oracle数据库用于Cloudera Manager Server和其他使用数据库的服务。有关规划，管理和备份Cloudera Manager数据存储的信息</p>
+<p>官网配置数据库链接：<br><a href="https://docs.cloudera.com/documentation/enterprise/6/6.3/topics/install_cm_mariadb.html" target="_blank" rel="noopener">https://docs.cloudera.com/documentation/enterprise/6/6.3/topics/install_cm_mariadb.html</a></p>
+<h3 id="安装MariaDB"><a href="#安装MariaDB" class="headerlink" title="安装MariaDB"></a>安装MariaDB</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install mariadb-server</span><br></pre></td></tr></table></figure>
+<p>官方推荐配置MariaDB vim /etc/my.cnf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">datadir=/var/lib/mysql</span><br><span class="line">socket=/var/lib/mysql/mysql.sock</span><br><span class="line">transaction-isolation = READ-COMMITTED</span><br><span class="line"># Disabling symbolic-links is recommended to prevent assorted security risks;</span><br><span class="line"># to do so, uncomment this line:</span><br><span class="line">symbolic-links = 0</span><br><span class="line"># Settings user and group are ignored when systemd is used.</span><br><span class="line"># If you need to run mysqld under a different user or group,</span><br><span class="line"># customize your systemd unit file for mariadb according to the</span><br><span class="line"># instructions in http://fedoraproject.org/wiki/Systemd</span><br><span class="line"></span><br><span class="line">key_buffer = 16M</span><br><span class="line">key_buffer_size = 32M</span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line">thread_stack = 256K</span><br><span class="line">thread_cache_size = 64</span><br><span class="line">query_cache_limit = 8M</span><br><span class="line">query_cache_size = 64M</span><br><span class="line">query_cache_type = 1</span><br><span class="line"></span><br><span class="line">max_connections = 550</span><br><span class="line">#expire_logs_days = 10</span><br><span class="line">#max_binlog_size = 100M</span><br><span class="line"></span><br><span class="line">#log_bin should be on a disk with enough free space.</span><br><span class="line">#Replace &apos;/var/lib/mysql/mysql_binary_log&apos; with an appropriate path for your</span><br><span class="line">#system and chown the specified folder to the mysql user.</span><br><span class="line">log_bin=/var/lib/mysql/mysql_binary_log</span><br><span class="line"></span><br><span class="line">#In later versions of MariaDB, if you enable the binary log and do not set</span><br><span class="line">#a server_id, MariaDB will not start. The server_id must be unique within</span><br><span class="line">#the replicating group.</span><br><span class="line">server_id=1</span><br><span class="line"></span><br><span class="line">binlog_format = mixed</span><br><span class="line"></span><br><span class="line">read_buffer_size = 2M</span><br><span class="line">read_rnd_buffer_size = 16M</span><br><span class="line">sort_buffer_size = 8M</span><br><span class="line">join_buffer_size = 8M</span><br><span class="line"></span><br><span class="line"># InnoDB settings</span><br><span class="line">innodb_file_per_table = 1</span><br><span class="line">innodb_flush_log_at_trx_commit  = 2</span><br><span class="line">innodb_log_buffer_size = 64M</span><br><span class="line">innodb_buffer_pool_size = 4G</span><br><span class="line">innodb_thread_concurrency = 8</span><br><span class="line">innodb_flush_method = O_DIRECT</span><br><span class="line">innodb_log_file_size = 512M</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line">log-error=/var/log/mariadb/mariadb.log</span><br><span class="line">pid-file=/var/run/mariadb/mariadb.pid</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># include all files from the config directory</span><br><span class="line">#</span><br><span class="line">!includedir /etc/my.cnf.d</span><br></pre></td></tr></table></figure></p>
+<h3 id="设置数据库的密码"><a href="#设置数据库的密码" class="headerlink" title="设置数据库的密码"></a>设置数据库的密码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/mysql_secure_installation</span><br><span class="line"></span><br><span class="line">[...]</span><br><span class="line">Enter current password for root (enter for none):</span><br><span class="line">OK, successfully used password, moving on...</span><br><span class="line">[...]</span><br><span class="line">Set root password? [Y/n] Y</span><br><span class="line">New password:</span><br><span class="line">Re-enter new password:</span><br><span class="line">Remove anonymous users? [Y/n] Y</span><br><span class="line">[...]</span><br><span class="line">Disallow root login remotely? [Y/n] N</span><br><span class="line">[...]</span><br><span class="line">Remove test database and access to it [Y/n] Y</span><br><span class="line">[...]</span><br><span class="line">Reload privilege tables now? [Y/n] Y</span><br><span class="line">All done!</span><br></pre></td></tr></table></figure>
+<h3 id="为MariaDB安装MySQL-JDBC驱动程序"><a href="#为MariaDB安装MySQL-JDBC驱动程序" class="headerlink" title="为MariaDB安装MySQL JDBC驱动程序"></a>为MariaDB安装MySQL JDBC驱动程序</h3><p>重要提示：请勿使用yum安装 命令安装MySQL驱动程序包，因为它安装了OpenJDK，然后使用Linux 备择方案 命令将系统JDK设置为OpenJDK。<br>注意： Cloudera建议仅使用JDBC驱动程序的5.1版。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf mysql-connector-java-5.1.46.tar.gz</span><br><span class="line"></span><br><span class="line">mkdir -p /usr/share/java/ </span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> mysql-connector-java-5.1.46 </span><br><span class="line"></span><br><span class="line">cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar</span><br></pre></td></tr></table></figure>
+<h3 id="为cloudera创建数据库"><a href="#为cloudera创建数据库" class="headerlink" title="为cloudera创建数据库"></a>为cloudera创建数据库</h3><p>根据官网，推荐使用以下配置<br><img src="CMinstall/30.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> scm <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> scm.* <span class="keyword">TO</span> <span class="string">'scm'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> amon <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> amon.* <span class="keyword">TO</span> <span class="string">'amon'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> rman <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> rman.* <span class="keyword">TO</span> <span class="string">'rman'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> hue <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> hue.* <span class="keyword">TO</span> <span class="string">'hue'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> metastore <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> metastore.* <span class="keyword">TO</span> <span class="string">'hive'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> sentry <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> sentry.* <span class="keyword">TO</span> <span class="string">'sentry'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="keyword">nav</span> <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> nav.* <span class="keyword">TO</span> <span class="string">'nav'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> navms <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> navms.* <span class="keyword">TO</span> <span class="string">'navms'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> oozie <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> oozie.* <span class="keyword">TO</span> <span class="string">'oozie'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="设置Cloudera-Manager数据库"><a href="#设置Cloudera-Manager数据库" class="headerlink" title="设置Cloudera Manager数据库"></a>设置Cloudera Manager数据库</h3><p>运行/opt/cloudera/cm/schema/scm_prepare_database.sh<br><code>/opt/cloudera/cm/schema/scm_prepare_database.sh mysql -h 172.18.21.61 scm scm</code></p>
+<h2 id="安装CDH和其他软件"><a href="#安装CDH和其他软件" class="headerlink" title="安装CDH和其他软件"></a>安装CDH和其他软件</h2><p>启动Cloudera Manager Server：<code>systemctl start cloudera-scm-server</code></p>
+<p>第一次启动时需要去数据库中创建表，可以通过<code>tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log</code>来监控日志信息<br>最后日志出现下面的一句说明启动成功<br><code>INFO WebServerImpl:com.cloudera.server.cmf.WebServerImpl: Started Jetty server.</code></p>
+<h1 id="CDH6安装步骤"><a href="#CDH6安装步骤" class="headerlink" title="CDH6安装步骤"></a>CDH6安装步骤</h1><h2 id="开始安装CM"><a href="#开始安装CM" class="headerlink" title="开始安装CM"></a>开始安装CM</h2><p><img src="CMinstall/13.04.54.png" alt="CDH6"></p>
+<ol>
+<li><p>同意许可条件，点击继续，进行下一步。<br><img src="CMinstall/13.05.08.png" alt="CDH6"></p>
+</li>
+<li><p>选择使用60天，点击继续，进行安装。<br><img src="CMinstall/13.05.30.png" alt="CDH6"></p>
+</li>
+</ol>
+<h2 id="开始安装CDH"><a href="#开始安装CDH" class="headerlink" title="开始安装CDH"></a>开始安装CDH</h2><ol>
+<li><p>点击继续，进行下一步。<br><img src="CMinstall/13.05.40.png" alt="CDH6"></p>
+</li>
+<li><p>给集群创建一个名称，点击继续，进行下一步。<br><img src="CMinstall/13.05.53.png" alt="CDH6"></p>
+</li>
+<li><p>输入集群节点主机名或IP地址（点击“模式”可查看示例），然后点击搜索，会显示所有节点，选中。点击继续进行下一步。<br><img src="CMinstall/13.06.11.png" alt="CDH6"><br><img src="CMinstall/13.06.22.png" alt="CDH6"></p>
+</li>
+<li><p>Cloudera Mnager Agent选择“自定义存储库”，并输入：<code>http://${这台节点IP}/cloudera/CM/6.3.1/</code>。下方CDH and other software点击“选择方法”中的“使用Parcel（建议）”后面的“更多选项”。<br><img src="CMinstall/13.07.14.png" alt="CDH6"></p>
+</li>
+<li><p>随意点击其中一个“+”，填写远程Parcel存储库的URL。这里我们输入：<code>http://${这台节点IP}/cloudera/CDH/6.3.2/</code>。点击确定。<br><img src="CMinstall/13.07.49.png" alt="CDH6"></p>
+</li>
+<li><p>在选择“CDH-6.3.2-1.cdh6.3.2.p0.1605554”版本，其他Parcel都选择“无”。点击继续进行下一步。<br><img src="CMinstall/WechatIMG54.jpg" alt="CDH6"></p>
+</li>
+<li><p>点击“安装 Oracle Java SE 开发工具包 (JDK)”，然后点击“继续”。<br><img src="CMinstall/13.08.03.png" alt="CDH6"></p>
+</li>
+<li><p>输入root用户密码，点击继续进行下一步。<br><img src="CMinstall/13.09.09.png" alt="CDH6"></p>
+</li>
+<li><p>进入“集群安装”的安装页面，完成后会自动进入“集群安装”的“安装选定Parcel”页面，完成后点击“继续”。<br><img src="CMinstall/13.25.58.png" alt="CDH6"></p>
+</li>
+<li><p>进入“集群安装”的“检查主机正确性”页面，检查发现透明化页面没有关闭，前往配置文件修改进行关闭，重新检查，完成后点击“继续”。<br><img src="CMinstall/13.29.50.png" alt="CDH6"><br><img src="CMinstall/13.30.40.png" alt="CDH6"></p>
+</li>
+<li><p>进入“集群设置”的“选中集群上安装哪些CDH6服务”页面，这里我们选择“自定义服务”，勾选HBase、HDFS、Hive、Impala、YARN和ZooKeeper等，然后点击“继续”。进入“集群设置”的“自定义角色分配”页面。<br><img src="CMinstall/13.38.32.png" alt="CDH6"><br><img src="CMinstall/13.38.23.png" alt="CDH6"></p>
+</li>
+<li><p>进入“集群设置”的“数据库设置”页面，点击“测试连接”，这里必须记住Hive元数据存储所在的库的密码，然后点击“继续”。<br><img src="CMinstall/13.39.58.png" alt="CDH6"></p>
+</li>
+<li><p>进入“集群设置”的“审核更改”页面，我们使用默认配置，点击“继续”。然后进入“集群设置”的“初始化和启动”页面，等待初始化和启动完成。<br><img src="CMinstall/13.40.57.png" alt="CDH6"></p>
+</li>
+<li><p>完成后点击继续。安装完成就会来到主页面。<br><img src="CMinstall/14.00.36.png" alt="CDH6"><br><img src="CMinstall/14.00.45.png" alt="CDH6"></p>
+</li>
+</ol>
+<h2 id="启用HA"><a href="#启用HA" class="headerlink" title="启用HA"></a>启用HA</h2><h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><p>在CM主页点击“HDFS”，如下图：<br><img src="CMinstall/WechatIMG58.png" alt="hdfs"></p>
+<p>进入HDFS状态页面后，点击右上角的“操作”，点击下拉框的“启用High Availability”，如下图：<br><img src="CMinstall/WechatIMG59.png" alt="hdfs"></p>
+<p>使用默认的“nameservice1”名称，点击“继续”，如下图：<br><img src="CMinstall/WechatIMG60.png" alt="hdfs"></p>
+<p>点击继续，如下图：<br><img src="CMinstall/WechatIMG61.png" alt="hdfs"></p>
+<p>其中NameNode主机，选择集群中的node2这一台，点击“确认”，如下图：<br><img src="CMinstall/WechatIMG62.png" alt="hdfs"></p>
+<p>其中JournalNode主机，选择集群中至少三个以上的奇数节点，点击“确认”，如下图：<br><img src="CMinstall/WechatIMG63.png" alt="hdfs"></p>
+<p>配置HDFS的HA的存储目录，然后点击“继续”，如下图：<br><img src="CMinstall/WechatIMG64.png" alt="hdfs"></p>
+<p>等待“启用HDFS的HA”完成，如下图：<br><img src="CMinstall/WechatIMG65.png" alt="hdfs"></p>
+<p>其中“格式化”错误不用管，这是由于不需要格式导致的，点击“继续”，如下图：<br><img src="CMinstall/WechatIMG66.png" alt="hdfs"></p>
+<p>点击“完成”，完成启用HDFS的HA，如下图：<br><img src="CMinstall/WechatIMG67.png" alt="hdfs"></p>
+<p>然后还需要停止 Hive 服务，将 Hive Metastore 数据库备份到永久性存储中，运行服务命令”更新 Hive Metastore NameNodes”，然后重启 Hive 服务。</p>
+<p>首先停止Hive，如下图：<br><img src="CMinstall/WechatIMG68.png" alt="hdfs"><br>点击“停止”，如下图：<br><img src="CMinstall/WechatIMG69.png" alt="hdfs"><br>等待停止结束，然后点击“关闭”，如下图：<br><img src="CMinstall/WechatIMG70.png" alt="hdfs"></p>
+<p>回到CM主页面，点击“Hive”，如下图：<br><img src="CMinstall/WechatIMG71.png" alt="hdfs"></p>
+<p>进入Hive状态页面后，点击右上角的“操作”，点击下拉框的“更新 Hive Metastore NameNodes”，如下图：<br><img src="CMinstall/WechatIMG72.png" alt="hdfs"></p>
+<p>点击“更新 Hive Metastore NameNodes”，如下图：<br><img src="CMinstall/WechatIMG73.png" alt="hdfs"><br>等待更新完成，点击“关闭”，如下图：<br><img src="CMinstall/WechatIMG74.png" alt="hdfs"><br>然后启动Hive，如下图：<br><img src="CMinstall/WechatIMG75.png" alt="hdfs"></p>
+<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><p>在CM主页面，点击“YARN”，进入到状态页面后点击操作，点击“启用High Availability”如下图：<br><img src="CMinstall/WechatIMG55.png" alt="yarn"></p>
+<p>进入下一个页面，点击“选择一个主机”，如下图：<br><img src="CMinstall/WechatIMG56.png" alt="yarn"></p>
+<p>选择一个主机，点击“确定”，启用YARN HA完成。如下图：<br><img src="CMinstall/WechatIMG57.png" alt="yarn"></p>
+<h1 id="常用目录地址"><a href="#常用目录地址" class="headerlink" title="常用目录地址"></a>常用目录地址</h1><p><code>/etc/cloudera-scm-agent</code>：当出现无法验证CM-server的时候进行更改host信息<br><code>/etc/&lt;组件名&gt;</code>：组件的配置信息<br><code>/var/dfs</code>：HDFS目录，其中有dn、nn、jn、snn，可以在CM中对这些目录进行更改<br><code>/var/lib/cloudera-scm-agent</code>：当出现主机运行状态不良是将这目录下的cm_guid删除，重启cloudera-scm-agent服务即可重新生成cm_guid中的uuid</p>
+<h1 id="测试hive与sqoop"><a href="#测试hive与sqoop" class="headerlink" title="测试hive与sqoop"></a>测试hive与sqoop</h1><h2 id="本地数据导入到hive表中"><a href="#本地数据导入到hive表中" class="headerlink" title="本地数据导入到hive表中"></a>本地数据导入到hive表中</h2><p>首先先在hive中创建测试表；<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">test</span>(</span><br><span class="line"><span class="keyword">key</span> <span class="keyword">string</span>,</span><br><span class="line"><span class="keyword">value</span> <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">" "</span></span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> textfile;</span><br></pre></td></tr></table></figure></p>
+<p>然后准备测试数据文件，文件内容如下：<br><img src="CMinstall/1.png" alt="hive"></p>
+<p>然后使用以下命令将数据文件加载到hive表中。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/test_hive_data/test_data.txt'</span> <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure></p>
+<p>导入结果如下：<br><img src="CMinstall/2.png" alt="hive"></p>
+<p>如果我们想要覆盖test表里的数据，先修改数据文件里的数据。<br><img src="CMinstall/3.png" alt="hive"></p>
+<p>然后使用如下命令覆盖hive表中的数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/test_hive_data/test_data.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure></p>
+<p>查询结果如下：<br><img src="CMinstall/4.png" alt="hive"></p>
+<p>备注：（into相当于追加，overwrite into会覆盖原有数据）。</p>
+<h2 id="将hive表导出到本地"><a href="#将hive表导出到本地" class="headerlink" title="将hive表导出到本地"></a>将hive表导出到本地</h2><p>继续使用上面的test表，使用以下命令将数据导出到本地。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">local</span> <span class="keyword">directory</span> <span class="string">'/test_hive_data/'</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure></p>
+<p>在运行中报了如下错误：<br><img src="CMinstall/5.png" alt="hive"></p>
+<p>在运行hive语句之前，先执行<code>set hive.exec.stagingdir=/tmp/hive-staging</code>;然后再运行hive语句，依然会报以下错误。<br><img src="CMinstall/6.png" alt="hive"></p>
+<p>然后我们退出hive，使用sudo -u hdfs hive进入hive，再执行语句就会在设置的本地目录下出现一个数据文件。<br> <img src="CMinstall/7.png" alt="hive"></p>
+<h2 id="mysql数据库导入到hive表"><a href="#mysql数据库导入到hive表" class="headerlink" title="mysql数据库导入到hive表"></a>mysql数据库导入到hive表</h2><ul>
+<li><p>首先在mysql中创建测试数据库sqooptest，并且创建测试表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">TABLE</span> <span class="keyword">test</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	msg <span class="built_in">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> ( <span class="keyword">id</span> )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>插入几条数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">test</span> (<span class="keyword">name</span>,msg) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'a'</span>,<span class="string">'testa'</span>),</span><br><span class="line">(<span class="string">'b'</span>,<span class="string">'testb'</span>),</span><br><span class="line">(<span class="string">'c'</span>,<span class="string">'testc'</span>),</span><br><span class="line">(<span class="string">'d'</span>,<span class="string">'testd'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在hive中创建对应的表</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">test</span>(<span class="keyword">id</span> <span class="built_in">int</span> , <span class="keyword">name</span> <span class="keyword">String</span>, msg <span class="keyword">String</span>) <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="CMinstall/10.png" alt="hive"></p>
+<p>这其中的问题：<br>当创建表没有指定字段分割符时，hive默认字段分割符为’\001’，如果修改了字段分割符，那么之后的所有导入导出操作都需要统一字段分割符。<br>如果不创建对应的表，那么执行sqoop的时候会自动创建hive表</p>
+<ul>
+<li>sqoop抽取mysql中的数据到hive中</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hive sqoop import --connect jdbc:mysql://172.18.21.61:3306/testsqoop --username root --password hex,159357 --table <span class="built_in">test</span> --hive-import --fields-terminated-by <span class="string">"\t"</span>  --hive-overwrite  --hive-table <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>查询结果<br> <img src="CMinstall/11.png" alt="hive"></p>
+<h2 id="Hive表导出到mysql"><a href="#Hive表导出到mysql" class="headerlink" title="Hive表导出到mysql"></a>Hive表导出到mysql</h2><p>需要先在mysql中创建表，此时我们将刚才创建的test表中数据删除，并且添加一行包含中文的数据。<br><img src="CMinstall/12.png" alt="hive"></p>
+<ul>
+<li><p>此时执行sqoop脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hive sqoop <span class="built_in">export</span> --connect jdbc:mysql://172.18.21.61:3306/testsqoop?characterEncoding=utf-8 --username root --password hex,159357 --table <span class="built_in">test</span> --<span class="built_in">export</span>-dir /user/hive/warehouse/<span class="built_in">test</span> --input-fields-terminated-by <span class="string">'\t'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结果如下：<br><img src="CMinstall/13.png" alt="hive"></p>
+</li>
+</ul>
+<h2 id="中文乱码问题："><a href="#中文乱码问题：" class="headerlink" title="中文乱码问题："></a>中文乱码问题：</h2><p>mysql的默认默认字符集为latin1，通过\s命令可以查看mysql的字符集，如下：<br><img src="CMinstall/20.png" alt="hive"><br>已经知道是字符集问题后，查看字符集变量名，然后对latin1的字符集进行修改，修改为utf-8<br><img src="CMinstall/21.png" alt="hive"><br><img src="CMinstall/22.png" alt="hive"><br>修改后为：<br><img src="CMinstall/23.png" alt="hive"><br>此时只需要执行导出操作即可显示出中文。</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/10/16/thinkOfHadoop/" title="对Hadoop优化的思考">
+                    <div class="prevTitle">对Hadoop优化的思考</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQxMS8xNzk1OA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:web@mtman.site" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/qrcode.jpg">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//weibo.com/2261202055" class="iconfont-archer weibo" target="_blank" title="weibo"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/1418144" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装前准备"><span class="toc-number">1.</span> <span class="toc-text">安装前准备</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置hostname"><span class="toc-number">1.1.</span> <span class="toc-text">设置hostname</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#禁用防火墙和selinux"><span class="toc-number">1.2.</span> <span class="toc-text">禁用防火墙和selinux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启用NTP"><span class="toc-number">1.3.</span> <span class="toc-text">启用NTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭透明大页面"><span class="toc-number">1.4.</span> <span class="toc-text">关闭透明大页面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装Cloudera-Manager和CDH"><span class="toc-number">2.</span> <span class="toc-text">安装Cloudera Manager和CDH</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置本地yum库"><span class="toc-number">2.1.</span> <span class="toc-text">配置本地yum库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载CM的repo资源"><span class="toc-number">2.1.1.</span> <span class="toc-text">下载CM的repo资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载CDH的parcels资源"><span class="toc-number">2.1.2.</span> <span class="toc-text">下载CDH的parcels资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置yum资源"><span class="toc-number">2.1.3.</span> <span class="toc-text">配置yum资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成repodata资源"><span class="toc-number">2.1.4.</span> <span class="toc-text">生成repodata资源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装JDK"><span class="toc-number">2.2.</span> <span class="toc-text">安装JDK</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Cloudera-Manager-Server"><span class="toc-number">2.3.</span> <span class="toc-text">安装Cloudera Manager Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装和配置数据库"><span class="toc-number">2.4.</span> <span class="toc-text">安装和配置数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装MariaDB"><span class="toc-number">2.4.1.</span> <span class="toc-text">安装MariaDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置数据库的密码"><span class="toc-number">2.4.2.</span> <span class="toc-text">设置数据库的密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为MariaDB安装MySQL-JDBC驱动程序"><span class="toc-number">2.4.3.</span> <span class="toc-text">为MariaDB安装MySQL JDBC驱动程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为cloudera创建数据库"><span class="toc-number">2.4.4.</span> <span class="toc-text">为cloudera创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置Cloudera-Manager数据库"><span class="toc-number">2.4.5.</span> <span class="toc-text">设置Cloudera Manager数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装CDH和其他软件"><span class="toc-number">2.5.</span> <span class="toc-text">安装CDH和其他软件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CDH6安装步骤"><span class="toc-number">3.</span> <span class="toc-text">CDH6安装步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#开始安装CM"><span class="toc-number">3.1.</span> <span class="toc-text">开始安装CM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始安装CDH"><span class="toc-number">3.2.</span> <span class="toc-text">开始安装CDH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启用HA"><span class="toc-number">3.3.</span> <span class="toc-text">启用HA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS"><span class="toc-number">3.3.1.</span> <span class="toc-text">HDFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YARN"><span class="toc-number">3.3.2.</span> <span class="toc-text">YARN</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#常用目录地址"><span class="toc-number">4.</span> <span class="toc-text">常用目录地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试hive与sqoop"><span class="toc-number">5.</span> <span class="toc-text">测试hive与sqoop</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#本地数据导入到hive表中"><span class="toc-number">5.1.</span> <span class="toc-text">本地数据导入到hive表中</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将hive表导出到本地"><span class="toc-number">5.2.</span> <span class="toc-text">将hive表导出到本地</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql数据库导入到hive表"><span class="toc-number">5.3.</span> <span class="toc-text">mysql数据库导入到hive表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hive表导出到mysql"><span class="toc-number">5.4.</span> <span class="toc-text">Hive表导出到mysql</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中文乱码问题："><span class="toc-number">5.5.</span> <span class="toc-text">中文乱码问题：</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 29
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href="/2019/12/05/CMinstall/">CM6及CDH的安装</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/16</span><a class="archive-post-title" href="/2019/10/16/thinkOfHadoop/">对Hadoop优化的思考</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive5/">hive调优</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive1/">Hive基本概念</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive2/">Hive Shell参数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive3/">Hive函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/dw/">data warehouse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href="/2019/08/30/hive4/">hive数据压缩与存储</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href="/2019/08/27/sqoop/">sqoop</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/zookeeper/">zookeeper</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/mapreduce/">mapreduce</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/hadoop/">hadoop与hdfs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/yarn/">yarn</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/Hbase/">Hbase</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span><a class="archive-post-title" href="/2019/08/19/createhive/">hive创建表、分区、分桶</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day12/">with open</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day11/">tcp与udp的比较</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day10/">TCP/IP和UDP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span><a class="archive-post-title" href="/2019/05/23/day9/">网络通信</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day8/">面向对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href="/2019/05/21/day7/">闭包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day4/">生成器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day2/">python函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/05</span><a class="archive-post-title" href="/2019/01/05/dbknowledge/">数据库理论基础</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href="/2018/12/01/bigdata/">大数据课程中的算法</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="bigdata"><span class="iconfont-archer">&#xe606;</span>bigdata</span>
+    
+        <span class="sidebar-tag-name" data-tags="hadoop"><span class="iconfont-archer">&#xe606;</span>hadoop</span>
+    
+        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
+    
+        <span class="sidebar-tag-name" data-tags="大数据"><span class="iconfont-archer">&#xe606;</span>大数据</span>
+    
+        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
+    
+        <span class="sidebar-tag-name" data-tags="mapreduce，hive"><span class="iconfont-archer">&#xe606;</span>mapreduce，hive</span>
+    
+        <span class="sidebar-tag-name" data-tags="yarn"><span class="iconfont-archer">&#xe606;</span>yarn</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
+    
+        <span class="sidebar-tag-name" data-tags="数据仓库"><span class="iconfont-archer">&#xe606;</span>数据仓库</span>
+    
+        <span class="sidebar-tag-name" data-tags="CDH"><span class="iconfont-archer">&#xe606;</span>CDH</span>
+    
+        <span class="sidebar-tag-name" data-tags="HDFS"><span class="iconfont-archer">&#xe606;</span>HDFS</span>
+    
+        <span class="sidebar-tag-name" data-tags="mapreduce"><span class="iconfont-archer">&#xe606;</span>mapreduce</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

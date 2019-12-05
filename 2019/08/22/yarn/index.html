@@ -266,11 +266,11 @@ height:50vh;
                 
                     <div class="post-intro-tags">
     
+        <a class="post-tag" href="javascript:void(0);" data-tags="bigdata">bigdata</a>
+    
         <a class="post-tag" href="javascript:void(0);" data-tags="hadoop">hadoop</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags="大数据">大数据</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="bigdata">bigdata</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags="yarn">yarn</a>
     
@@ -444,7 +444,8 @@ height:50vh;
 <li><p>Container主要作用：<br>  对任务运行环境的抽象<br>  任务运行资源（节点，内存，cpu）<br>  任务启动命令<br>  任务运行环境</p>
 </li>
 </ul>
-<h2 id="yarn的架构"><a href="#yarn的架构" class="headerlink" title="yarn的架构"></a>yarn的架构</h2><h3 id="yarn当中的调度器"><a href="#yarn当中的调度器" class="headerlink" title="yarn当中的调度器"></a>yarn当中的调度器</h3><p>yarn我们都知道主要是用于做资源调度，任务分配等功能的，那么在hadoop当中，究竟使用什么算法来进行任务调度就需要我们关注了，hadoop支持好几种任务的调度方式，不同的场景需要使用不同的任务调度器</p>
+<h2 id="yarn的架构"><a href="#yarn的架构" class="headerlink" title="yarn的架构"></a>yarn的架构</h2><p><img src="图像 1.png" alt></p>
+<h3 id="yarn当中的调度器"><a href="#yarn当中的调度器" class="headerlink" title="yarn当中的调度器"></a>yarn当中的调度器</h3><p>yarn我们都知道主要是用于做资源调度，任务分配等功能的，那么在hadoop当中，究竟使用什么算法来进行任务调度就需要我们关注了，hadoop支持好几种任务的调度方式，不同的场景需要使用不同的任务调度器</p>
 <h3 id="yarn当中的调度器介绍："><a href="#yarn当中的调度器介绍：" class="headerlink" title="yarn当中的调度器介绍："></a>yarn当中的调度器介绍：</h3><h4 id="第一种调度器：FIFO-Scheduler-（队列调度器）"><a href="#第一种调度器：FIFO-Scheduler-（队列调度器）" class="headerlink" title="第一种调度器：FIFO Scheduler  （队列调度器）"></a>第一种调度器：FIFO Scheduler  （队列调度器）</h4><p>把应用按提交的顺序排成一个队列，这是一个先进先出队列，在进行资源分配的时候，先给队列中最头上的应用进行分配资源，待最头上的应用需求满足后再给下一个分配，以此类推。<br>FIFO Scheduler是最简单也是最容易理解的调度器，也不需要任何配置，但它并不适用于共享集群。大的应用可能会占用所有集群资源，这就导致其它应用被阻塞。在共享集群中，更适合采用Capacity Scheduler或Fair Scheduler，这两个调度器都允许大任务和小任务在提交的同时获得一定的系统资源。</p>
 <h4 id="第二种调度器：capacity-scheduler（容量调度器，apache版本默认使用的调度器）"><a href="#第二种调度器：capacity-scheduler（容量调度器，apache版本默认使用的调度器）" class="headerlink" title="第二种调度器：capacity  scheduler（容量调度器，apache版本默认使用的调度器）"></a>第二种调度器：capacity  scheduler（容量调度器，apache版本默认使用的调度器）</h4><p>Capacity 调度器允许多个组织共享整个集群，每个组织可以获得集群的一部分计算能力。通过为每个组织分配专门的队列，然后再为每个队列分配一定的集群资源，这样整个集群就可以通过设置多个队列的方式给多个组织提供服务了。除此之外，队列内部又可以垂直划分，这样一个组织内部的多个成员就可以共享这个队列资源了，在一个队列内部，资源的调度是采用的是先进先出(FIFO)策略。</p>
 <h4 id="第三种调度器：Fair-Scheduler（公平调度器，CDH版本的hadoop默认使用的调度器）"><a href="#第三种调度器：Fair-Scheduler（公平调度器，CDH版本的hadoop默认使用的调度器）" class="headerlink" title="第三种调度器：Fair Scheduler（公平调度器，CDH版本的hadoop默认使用的调度器）"></a>第三种调度器：Fair Scheduler（公平调度器，CDH版本的hadoop默认使用的调度器）</h4><p>Fair调度器的设计目标是为所有的应用分配公平的资源（对公平的定义可以通过参数来设置）。公平调度在也可以在多个队列间工作。举个例子，假设有两个用户A和B，他们分别拥有一个队列。当A启动一个job而B没有任务时，A会获得全部集群资源；当B启动一个job后，A的job会继续运行，不过一会儿之后两个任务会各自获得一半的集群资源。如果此时B再启动第二个job并且其它job还在运行，则它将会和B的第一个job共享B这个队列的资源，也就是B的两个job会用于四分之一的集群资源，而A的job仍然用于集群一半的资源，结果就是资源最终在两个用户之间平等的共享</p>
@@ -987,9 +988,39 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 27
+        Total : 29
         </div>
         <!-- search  -->
         
@@ -1002,6 +1033,16 @@ top:50vh;
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href="/2019/12/05/CMinstall/">CM6及CDH的安装</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/16</span><a class="archive-post-title" href="/2019/10/16/thinkOfHadoop/">对Hadoop优化的思考</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1050,17 +1091,17 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/hadoop/">hadoop与hdfs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/yarn/">yarn</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/Hbase/">Hbase</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span><a class="archive-post-title" href="/2019/08/22/hadoop/">hadoop与hdfs</a>
         </li>
     
     
@@ -1075,12 +1116,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day10/">TCP/IP和UDP</a>
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day11/">tcp与udp的比较</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day11/">tcp与udp的比较</a>
+            <span class="archive-post-date">05/24</span><a class="archive-post-title" href="/2019/05/24/day10/">TCP/IP和UDP</a>
         </li>
     
     
@@ -1100,7 +1141,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
         </li>
     
     
@@ -1110,12 +1151,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day1/">python的基础安装与数据类型</a>
         </li>
     
     
@@ -1125,7 +1166,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day3/">python高级函数</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
         </li>
     
     
@@ -1152,25 +1193,29 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="bigdata"><span class="iconfont-archer">&#xe606;</span>bigdata</span>
+    
         <span class="sidebar-tag-name" data-tags="hadoop"><span class="iconfont-archer">&#xe606;</span>hadoop</span>
     
-        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
+        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
     
         <span class="sidebar-tag-name" data-tags="大数据"><span class="iconfont-archer">&#xe606;</span>大数据</span>
     
-        <span class="sidebar-tag-name" data-tags="bigdata"><span class="iconfont-archer">&#xe606;</span>bigdata</span>
-    
-        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
+        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
         <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
+        <span class="sidebar-tag-name" data-tags="mapreduce，hive"><span class="iconfont-archer">&#xe606;</span>mapreduce，hive</span>
+    
         <span class="sidebar-tag-name" data-tags="yarn"><span class="iconfont-archer">&#xe606;</span>yarn</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
     
         <span class="sidebar-tag-name" data-tags="数据仓库"><span class="iconfont-archer">&#xe606;</span>数据仓库</span>
     
-        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
+        <span class="sidebar-tag-name" data-tags="CDH"><span class="iconfont-archer">&#xe606;</span>CDH</span>
     
         <span class="sidebar-tag-name" data-tags="HDFS"><span class="iconfont-archer">&#xe606;</span>HDFS</span>
     
