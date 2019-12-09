@@ -434,79 +434,79 @@ height:50vh;
 <h3 id="设置数据库的密码"><a href="#设置数据库的密码" class="headerlink" title="设置数据库的密码"></a>设置数据库的密码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/mysql_secure_installation</span><br><span class="line"></span><br><span class="line">[...]</span><br><span class="line">Enter current password for root (enter for none):</span><br><span class="line">OK, successfully used password, moving on...</span><br><span class="line">[...]</span><br><span class="line">Set root password? [Y/n] Y</span><br><span class="line">New password:</span><br><span class="line">Re-enter new password:</span><br><span class="line">Remove anonymous users? [Y/n] Y</span><br><span class="line">[...]</span><br><span class="line">Disallow root login remotely? [Y/n] N</span><br><span class="line">[...]</span><br><span class="line">Remove test database and access to it [Y/n] Y</span><br><span class="line">[...]</span><br><span class="line">Reload privilege tables now? [Y/n] Y</span><br><span class="line">All done!</span><br></pre></td></tr></table></figure>
 <h3 id="为MariaDB安装MySQL-JDBC驱动程序"><a href="#为MariaDB安装MySQL-JDBC驱动程序" class="headerlink" title="为MariaDB安装MySQL JDBC驱动程序"></a>为MariaDB安装MySQL JDBC驱动程序</h3><p>重要提示：请勿使用yum安装 命令安装MySQL驱动程序包，因为它安装了OpenJDK，然后使用Linux 备择方案 命令将系统JDK设置为OpenJDK。<br>注意： Cloudera建议仅使用JDBC驱动程序的5.1版。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf mysql-connector-java-5.1.46.tar.gz</span><br><span class="line"></span><br><span class="line">mkdir -p /usr/share/java/ </span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> mysql-connector-java-5.1.46 </span><br><span class="line"></span><br><span class="line">cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar</span><br></pre></td></tr></table></figure>
-<h3 id="为cloudera创建数据库"><a href="#为cloudera创建数据库" class="headerlink" title="为cloudera创建数据库"></a>为cloudera创建数据库</h3><p>根据官网，推荐使用以下配置<br><img src="CMinstall/30.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure></p>
+<h3 id="为cloudera创建数据库"><a href="#为cloudera创建数据库" class="headerlink" title="为cloudera创建数据库"></a>为cloudera创建数据库</h3><p>根据官网，推荐使用以下配置<br><img src="30.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> scm <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> scm.* <span class="keyword">TO</span> <span class="string">'scm'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> amon <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> amon.* <span class="keyword">TO</span> <span class="string">'amon'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> rman <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> rman.* <span class="keyword">TO</span> <span class="string">'rman'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> hue <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> hue.* <span class="keyword">TO</span> <span class="string">'hue'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> metastore <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> metastore.* <span class="keyword">TO</span> <span class="string">'hive'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> sentry <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> sentry.* <span class="keyword">TO</span> <span class="string">'sentry'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="keyword">nav</span> <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> nav.* <span class="keyword">TO</span> <span class="string">'nav'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> navms <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> navms.* <span class="keyword">TO</span> <span class="string">'navms'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> oozie <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">DEFAULT</span> <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> oozie.* <span class="keyword">TO</span> <span class="string">'oozie'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'**********'</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="设置Cloudera-Manager数据库"><a href="#设置Cloudera-Manager数据库" class="headerlink" title="设置Cloudera Manager数据库"></a>设置Cloudera Manager数据库</h3><p>运行/opt/cloudera/cm/schema/scm_prepare_database.sh<br><code>/opt/cloudera/cm/schema/scm_prepare_database.sh mysql -h 172.18.21.61 scm scm</code></p>
 <h2 id="安装CDH和其他软件"><a href="#安装CDH和其他软件" class="headerlink" title="安装CDH和其他软件"></a>安装CDH和其他软件</h2><p>启动Cloudera Manager Server：<code>systemctl start cloudera-scm-server</code></p>
 <p>第一次启动时需要去数据库中创建表，可以通过<code>tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log</code>来监控日志信息<br>最后日志出现下面的一句说明启动成功<br><code>INFO WebServerImpl:com.cloudera.server.cmf.WebServerImpl: Started Jetty server.</code></p>
-<h1 id="CDH6安装步骤"><a href="#CDH6安装步骤" class="headerlink" title="CDH6安装步骤"></a>CDH6安装步骤</h1><h2 id="开始安装CM"><a href="#开始安装CM" class="headerlink" title="开始安装CM"></a>开始安装CM</h2><p><img src="CMinstall/13.04.54.png" alt="CDH6"></p>
+<h1 id="CDH6安装步骤"><a href="#CDH6安装步骤" class="headerlink" title="CDH6安装步骤"></a>CDH6安装步骤</h1><h2 id="开始安装CM"><a href="#开始安装CM" class="headerlink" title="开始安装CM"></a>开始安装CM</h2><p><img src="13.04.54.png" alt="CDH6"></p>
 <ol>
-<li><p>同意许可条件，点击继续，进行下一步。<br><img src="CMinstall/13.05.08.png" alt="CDH6"></p>
+<li><p>同意许可条件，点击继续，进行下一步。<br><img src="13.05.08.png" alt="CDH6"></p>
 </li>
-<li><p>选择使用60天，点击继续，进行安装。<br><img src="CMinstall/13.05.30.png" alt="CDH6"></p>
+<li><p>选择使用60天，点击继续，进行安装。<br><img src="13.05.30.png" alt="CDH6"></p>
 </li>
 </ol>
 <h2 id="开始安装CDH"><a href="#开始安装CDH" class="headerlink" title="开始安装CDH"></a>开始安装CDH</h2><ol>
-<li><p>点击继续，进行下一步。<br><img src="CMinstall/13.05.40.png" alt="CDH6"></p>
+<li><p>点击继续，进行下一步。<br><img src="13.05.40.png" alt="CDH6"></p>
 </li>
-<li><p>给集群创建一个名称，点击继续，进行下一步。<br><img src="CMinstall/13.05.53.png" alt="CDH6"></p>
+<li><p>给集群创建一个名称，点击继续，进行下一步。<br><img src="13.05.53.png" alt="CDH6"></p>
 </li>
-<li><p>输入集群节点主机名或IP地址（点击“模式”可查看示例），然后点击搜索，会显示所有节点，选中。点击继续进行下一步。<br><img src="CMinstall/13.06.11.png" alt="CDH6"><br><img src="CMinstall/13.06.22.png" alt="CDH6"></p>
+<li><p>输入集群节点主机名或IP地址（点击“模式”可查看示例），然后点击搜索，会显示所有节点，选中。点击继续进行下一步。<br><img src="13.06.11.png" alt="CDH6"><br><img src="13.06.22.png" alt="CDH6"></p>
 </li>
-<li><p>Cloudera Mnager Agent选择“自定义存储库”，并输入：<code>http://${这台节点IP}/cloudera/CM/6.3.1/</code>。下方CDH and other software点击“选择方法”中的“使用Parcel（建议）”后面的“更多选项”。<br><img src="CMinstall/13.07.14.png" alt="CDH6"></p>
+<li><p>Cloudera Mnager Agent选择“自定义存储库”，并输入：<code>http://${这台节点IP}/cloudera/CM/6.3.1/</code>。下方CDH and other software点击“选择方法”中的“使用Parcel（建议）”后面的“更多选项”。<br><img src="13.07.14.png" alt="CDH6"></p>
 </li>
-<li><p>随意点击其中一个“+”，填写远程Parcel存储库的URL。这里我们输入：<code>http://${这台节点IP}/cloudera/CDH/6.3.2/</code>。点击确定。<br><img src="CMinstall/13.07.49.png" alt="CDH6"></p>
+<li><p>随意点击其中一个“+”，填写远程Parcel存储库的URL。这里我们输入：<code>http://${这台节点IP}/cloudera/CDH/6.3.2/</code>。点击确定。<br><img src="13.07.49.png" alt="CDH6"></p>
 </li>
-<li><p>在选择“CDH-6.3.2-1.cdh6.3.2.p0.1605554”版本，其他Parcel都选择“无”。点击继续进行下一步。<br><img src="CMinstall/WechatIMG54.jpg" alt="CDH6"></p>
+<li><p>在选择“CDH-6.3.2-1.cdh6.3.2.p0.1605554”版本，其他Parcel都选择“无”。点击继续进行下一步。<br><img src="WechatIMG54.jpg" alt="CDH6"></p>
 </li>
-<li><p>点击“安装 Oracle Java SE 开发工具包 (JDK)”，然后点击“继续”。<br><img src="CMinstall/13.08.03.png" alt="CDH6"></p>
+<li><p>点击“安装 Oracle Java SE 开发工具包 (JDK)”，然后点击“继续”。<br><img src="13.08.03.png" alt="CDH6"></p>
 </li>
-<li><p>输入root用户密码，点击继续进行下一步。<br><img src="CMinstall/13.09.09.png" alt="CDH6"></p>
+<li><p>输入root用户密码，点击继续进行下一步。<br><img src="13.09.09.png" alt="CDH6"></p>
 </li>
-<li><p>进入“集群安装”的安装页面，完成后会自动进入“集群安装”的“安装选定Parcel”页面，完成后点击“继续”。<br><img src="CMinstall/13.25.58.png" alt="CDH6"></p>
+<li><p>进入“集群安装”的安装页面，完成后会自动进入“集群安装”的“安装选定Parcel”页面，完成后点击“继续”。<br><img src="13.25.58.png" alt="CDH6"></p>
 </li>
-<li><p>进入“集群安装”的“检查主机正确性”页面，检查发现透明化页面没有关闭，前往配置文件修改进行关闭，重新检查，完成后点击“继续”。<br><img src="CMinstall/13.29.50.png" alt="CDH6"><br><img src="CMinstall/13.30.40.png" alt="CDH6"></p>
+<li><p>进入“集群安装”的“检查主机正确性”页面，检查发现透明化页面没有关闭，前往配置文件修改进行关闭，重新检查，完成后点击“继续”。<br><img src="13.29.50.png" alt="CDH6"><br><img src="13.30.40.png" alt="CDH6"></p>
 </li>
-<li><p>进入“集群设置”的“选中集群上安装哪些CDH6服务”页面，这里我们选择“自定义服务”，勾选HBase、HDFS、Hive、Impala、YARN和ZooKeeper等，然后点击“继续”。进入“集群设置”的“自定义角色分配”页面。<br><img src="CMinstall/13.38.32.png" alt="CDH6"><br><img src="CMinstall/13.38.23.png" alt="CDH6"></p>
+<li><p>进入“集群设置”的“选中集群上安装哪些CDH6服务”页面，这里我们选择“自定义服务”，勾选HBase、HDFS、Hive、Impala、YARN和ZooKeeper等，然后点击“继续”。进入“集群设置”的“自定义角色分配”页面。<br><img src="13.38.32.png" alt="CDH6"><br><img src="13.38.23.png" alt="CDH6"></p>
 </li>
-<li><p>进入“集群设置”的“数据库设置”页面，点击“测试连接”，这里必须记住Hive元数据存储所在的库的密码，然后点击“继续”。<br><img src="CMinstall/13.39.58.png" alt="CDH6"></p>
+<li><p>进入“集群设置”的“数据库设置”页面，点击“测试连接”，这里必须记住Hive元数据存储所在的库的密码，然后点击“继续”。<br><img src="13.39.58.png" alt="CDH6"></p>
 </li>
-<li><p>进入“集群设置”的“审核更改”页面，我们使用默认配置，点击“继续”。然后进入“集群设置”的“初始化和启动”页面，等待初始化和启动完成。<br><img src="CMinstall/13.40.57.png" alt="CDH6"></p>
+<li><p>进入“集群设置”的“审核更改”页面，我们使用默认配置，点击“继续”。然后进入“集群设置”的“初始化和启动”页面，等待初始化和启动完成。<br><img src="13.40.57.png" alt="CDH6"></p>
 </li>
-<li><p>完成后点击继续。安装完成就会来到主页面。<br><img src="CMinstall/14.00.36.png" alt="CDH6"><br><img src="CMinstall/14.00.45.png" alt="CDH6"></p>
+<li><p>完成后点击继续。安装完成就会来到主页面。<br><img src="14.00.36.png" alt="CDH6"><br><img src="14.00.45.png" alt="CDH6"></p>
 </li>
 </ol>
-<h2 id="启用HA"><a href="#启用HA" class="headerlink" title="启用HA"></a>启用HA</h2><h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><p>在CM主页点击“HDFS”，如下图：<br><img src="CMinstall/WechatIMG58.png" alt="hdfs"></p>
-<p>进入HDFS状态页面后，点击右上角的“操作”，点击下拉框的“启用High Availability”，如下图：<br><img src="CMinstall/WechatIMG59.png" alt="hdfs"></p>
-<p>使用默认的“nameservice1”名称，点击“继续”，如下图：<br><img src="CMinstall/WechatIMG60.png" alt="hdfs"></p>
-<p>点击继续，如下图：<br><img src="CMinstall/WechatIMG61.png" alt="hdfs"></p>
-<p>其中NameNode主机，选择集群中的node2这一台，点击“确认”，如下图：<br><img src="CMinstall/WechatIMG62.png" alt="hdfs"></p>
-<p>其中JournalNode主机，选择集群中至少三个以上的奇数节点，点击“确认”，如下图：<br><img src="CMinstall/WechatIMG63.png" alt="hdfs"></p>
-<p>配置HDFS的HA的存储目录，然后点击“继续”，如下图：<br><img src="CMinstall/WechatIMG64.png" alt="hdfs"></p>
-<p>等待“启用HDFS的HA”完成，如下图：<br><img src="CMinstall/WechatIMG65.png" alt="hdfs"></p>
-<p>其中“格式化”错误不用管，这是由于不需要格式导致的，点击“继续”，如下图：<br><img src="CMinstall/WechatIMG66.png" alt="hdfs"></p>
-<p>点击“完成”，完成启用HDFS的HA，如下图：<br><img src="CMinstall/WechatIMG67.png" alt="hdfs"></p>
+<h2 id="启用HA"><a href="#启用HA" class="headerlink" title="启用HA"></a>启用HA</h2><h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><p>在CM主页点击“HDFS”，如下图：<br><img src="WechatIMG58.png" alt="hdfs"></p>
+<p>进入HDFS状态页面后，点击右上角的“操作”，点击下拉框的“启用High Availability”，如下图：<br><img src="WechatIMG59.png" alt="hdfs"></p>
+<p>使用默认的“nameservice1”名称，点击“继续”，如下图：<br><img src="WechatIMG60.png" alt="hdfs"></p>
+<p>点击继续，如下图：<br><img src="WechatIMG61.png" alt="hdfs"></p>
+<p>其中NameNode主机，选择集群中的node2这一台，点击“确认”，如下图：<br><img src="WechatIMG62.png" alt="hdfs"></p>
+<p>其中JournalNode主机，选择集群中至少三个以上的奇数节点，点击“确认”，如下图：<br><img src="WechatIMG63.png" alt="hdfs"></p>
+<p>配置HDFS的HA的存储目录，然后点击“继续”，如下图：<br><img src="WechatIMG64.png" alt="hdfs"></p>
+<p>等待“启用HDFS的HA”完成，如下图：<br><img src="WechatIMG65.png" alt="hdfs"></p>
+<p>其中“格式化”错误不用管，这是由于不需要格式导致的，点击“继续”，如下图：<br><img src="WechatIMG66.png" alt="hdfs"></p>
+<p>点击“完成”，完成启用HDFS的HA，如下图：<br><img src="WechatIMG67.png" alt="hdfs"></p>
 <p>然后还需要停止 Hive 服务，将 Hive Metastore 数据库备份到永久性存储中，运行服务命令”更新 Hive Metastore NameNodes”，然后重启 Hive 服务。</p>
-<p>首先停止Hive，如下图：<br><img src="CMinstall/WechatIMG68.png" alt="hdfs"><br>点击“停止”，如下图：<br><img src="CMinstall/WechatIMG69.png" alt="hdfs"><br>等待停止结束，然后点击“关闭”，如下图：<br><img src="CMinstall/WechatIMG70.png" alt="hdfs"></p>
-<p>回到CM主页面，点击“Hive”，如下图：<br><img src="CMinstall/WechatIMG71.png" alt="hdfs"></p>
-<p>进入Hive状态页面后，点击右上角的“操作”，点击下拉框的“更新 Hive Metastore NameNodes”，如下图：<br><img src="CMinstall/WechatIMG72.png" alt="hdfs"></p>
-<p>点击“更新 Hive Metastore NameNodes”，如下图：<br><img src="CMinstall/WechatIMG73.png" alt="hdfs"><br>等待更新完成，点击“关闭”，如下图：<br><img src="CMinstall/WechatIMG74.png" alt="hdfs"><br>然后启动Hive，如下图：<br><img src="CMinstall/WechatIMG75.png" alt="hdfs"></p>
-<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><p>在CM主页面，点击“YARN”，进入到状态页面后点击操作，点击“启用High Availability”如下图：<br><img src="CMinstall/WechatIMG55.png" alt="yarn"></p>
-<p>进入下一个页面，点击“选择一个主机”，如下图：<br><img src="CMinstall/WechatIMG56.png" alt="yarn"></p>
-<p>选择一个主机，点击“确定”，启用YARN HA完成。如下图：<br><img src="CMinstall/WechatIMG57.png" alt="yarn"></p>
+<p>首先停止Hive，如下图：<br><img src="WechatIMG68.png" alt="hdfs"><br>点击“停止”，如下图：<br><img src="WechatIMG69.png" alt="hdfs"><br>等待停止结束，然后点击“关闭”，如下图：<br><img src="WechatIMG70.png" alt="hdfs"></p>
+<p>回到CM主页面，点击“Hive”，如下图：<br><img src="WechatIMG71.png" alt="hdfs"></p>
+<p>进入Hive状态页面后，点击右上角的“操作”，点击下拉框的“更新 Hive Metastore NameNodes”，如下图：<br><img src="WechatIMG72.png" alt="hdfs"></p>
+<p>点击“更新 Hive Metastore NameNodes”，如下图：<br><img src="WechatIMG73.png" alt="hdfs"><br>等待更新完成，点击“关闭”，如下图：<br><img src="WechatIMG74.png" alt="hdfs"><br>然后启动Hive，如下图：<br><img src="WechatIMG75.png" alt="hdfs"></p>
+<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><p>在CM主页面，点击“YARN”，进入到状态页面后点击操作，点击“启用High Availability”如下图：<br><img src="WechatIMG55.png" alt="yarn"></p>
+<p>进入下一个页面，点击“选择一个主机”，如下图：<br><img src="WechatIMG56.png" alt="yarn"></p>
+<p>选择一个主机，点击“确定”，启用YARN HA完成。如下图：<br><img src="WechatIMG57.png" alt="yarn"></p>
 <h1 id="常用目录地址"><a href="#常用目录地址" class="headerlink" title="常用目录地址"></a>常用目录地址</h1><p><code>/etc/cloudera-scm-agent</code>：当出现无法验证CM-server的时候进行更改host信息<br><code>/etc/&lt;组件名&gt;</code>：组件的配置信息<br><code>/var/dfs</code>：HDFS目录，其中有dn、nn、jn、snn，可以在CM中对这些目录进行更改<br><code>/var/lib/cloudera-scm-agent</code>：当出现主机运行状态不良是将这目录下的cm_guid删除，重启cloudera-scm-agent服务即可重新生成cm_guid中的uuid</p>
 <h1 id="测试hive与sqoop"><a href="#测试hive与sqoop" class="headerlink" title="测试hive与sqoop"></a>测试hive与sqoop</h1><h2 id="本地数据导入到hive表中"><a href="#本地数据导入到hive表中" class="headerlink" title="本地数据导入到hive表中"></a>本地数据导入到hive表中</h2><p>首先先在hive中创建测试表；<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">test</span>(</span><br><span class="line"><span class="keyword">key</span> <span class="keyword">string</span>,</span><br><span class="line"><span class="keyword">value</span> <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">" "</span></span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> textfile;</span><br></pre></td></tr></table></figure></p>
-<p>然后准备测试数据文件，文件内容如下：<br><img src="CMinstall/1.png" alt="hive"></p>
+<p>然后准备测试数据文件，文件内容如下：<br><img src="1.png" alt="hive"></p>
 <p>然后使用以下命令将数据文件加载到hive表中。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/test_hive_data/test_data.txt'</span> <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure></p>
-<p>导入结果如下：<br><img src="CMinstall/2.png" alt="hive"></p>
-<p>如果我们想要覆盖test表里的数据，先修改数据文件里的数据。<br><img src="CMinstall/3.png" alt="hive"></p>
+<p>导入结果如下：<br><img src="2.png" alt="hive"></p>
+<p>如果我们想要覆盖test表里的数据，先修改数据文件里的数据。<br><img src="3.png" alt="hive"></p>
 <p>然后使用如下命令覆盖hive表中的数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/test_hive_data/test_data.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure></p>
-<p>查询结果如下：<br><img src="CMinstall/4.png" alt="hive"></p>
+<p>查询结果如下：<br><img src="4.png" alt="hive"></p>
 <p>备注：（into相当于追加，overwrite into会覆盖原有数据）。</p>
 <h2 id="将hive表导出到本地"><a href="#将hive表导出到本地" class="headerlink" title="将hive表导出到本地"></a>将hive表导出到本地</h2><p>继续使用上面的test表，使用以下命令将数据导出到本地。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">local</span> <span class="keyword">directory</span> <span class="string">'/test_hive_data/'</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure></p>
-<p>在运行中报了如下错误：<br><img src="CMinstall/5.png" alt="hive"></p>
-<p>在运行hive语句之前，先执行<code>set hive.exec.stagingdir=/tmp/hive-staging</code>;然后再运行hive语句，依然会报以下错误。<br><img src="CMinstall/6.png" alt="hive"></p>
-<p>然后我们退出hive，使用sudo -u hdfs hive进入hive，再执行语句就会在设置的本地目录下出现一个数据文件。<br> <img src="CMinstall/7.png" alt="hive"></p>
+<p>在运行中报了如下错误：<br><img src="5.png" alt="hive"></p>
+<p>在运行hive语句之前，先执行<code>set hive.exec.stagingdir=/tmp/hive-staging</code>;然后再运行hive语句，依然会报以下错误。<br><img src="6.png" alt="hive"></p>
+<p>然后我们退出hive，使用sudo -u hdfs hive进入hive，再执行语句就会在设置的本地目录下出现一个数据文件。<br> <img src="7.png" alt="hive"></p>
 <h2 id="mysql数据库导入到hive表"><a href="#mysql数据库导入到hive表" class="headerlink" title="mysql数据库导入到hive表"></a>mysql数据库导入到hive表</h2><ul>
 <li><p>首先在mysql中创建测试数据库sqooptest，并且创建测试表</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">TABLE</span> <span class="keyword">test</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	msg <span class="built_in">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> ( <span class="keyword">id</span> )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
@@ -518,22 +518,22 @@ height:50vh;
 </li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">test</span>(<span class="keyword">id</span> <span class="built_in">int</span> , <span class="keyword">name</span> <span class="keyword">String</span>, msg <span class="keyword">String</span>) <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="CMinstall/10.png" alt="hive"></p>
+<p><img src="10.png" alt="hive"></p>
 <p>这其中的问题：<br>当创建表没有指定字段分割符时，hive默认字段分割符为’\001’，如果修改了字段分割符，那么之后的所有导入导出操作都需要统一字段分割符。<br>如果不创建对应的表，那么执行sqoop的时候会自动创建hive表</p>
 <ul>
 <li>sqoop抽取mysql中的数据到hive中</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hive sqoop import --connect jdbc:mysql://172.18.21.61:3306/testsqoop --username root --password hex,159357 --table <span class="built_in">test</span> --hive-import --fields-terminated-by <span class="string">"\t"</span>  --hive-overwrite  --hive-table <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<p>查询结果<br> <img src="CMinstall/11.png" alt="hive"></p>
-<h2 id="Hive表导出到mysql"><a href="#Hive表导出到mysql" class="headerlink" title="Hive表导出到mysql"></a>Hive表导出到mysql</h2><p>需要先在mysql中创建表，此时我们将刚才创建的test表中数据删除，并且添加一行包含中文的数据。<br><img src="CMinstall/12.png" alt="hive"></p>
+<p>查询结果<br> <img src="11.png" alt="hive"></p>
+<h2 id="Hive表导出到mysql"><a href="#Hive表导出到mysql" class="headerlink" title="Hive表导出到mysql"></a>Hive表导出到mysql</h2><p>需要先在mysql中创建表，此时我们将刚才创建的test表中数据删除，并且添加一行包含中文的数据。<br><img src="12.png" alt="hive"></p>
 <ul>
 <li><p>此时执行sqoop脚本</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hive sqoop <span class="built_in">export</span> --connect jdbc:mysql://172.18.21.61:3306/testsqoop?characterEncoding=utf-8 --username root --password hex,159357 --table <span class="built_in">test</span> --<span class="built_in">export</span>-dir /user/hive/warehouse/<span class="built_in">test</span> --input-fields-terminated-by <span class="string">'\t'</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>结果如下：<br><img src="CMinstall/13.png" alt="hive"></p>
+<li><p>结果如下：<br><img src="13.png" alt="hive"></p>
 </li>
 </ul>
-<h2 id="中文乱码问题："><a href="#中文乱码问题：" class="headerlink" title="中文乱码问题："></a>中文乱码问题：</h2><p>mysql的默认默认字符集为latin1，通过\s命令可以查看mysql的字符集，如下：<br><img src="CMinstall/20.png" alt="hive"><br>已经知道是字符集问题后，查看字符集变量名，然后对latin1的字符集进行修改，修改为utf-8<br><img src="CMinstall/21.png" alt="hive"><br><img src="CMinstall/22.png" alt="hive"><br>修改后为：<br><img src="CMinstall/23.png" alt="hive"><br>此时只需要执行导出操作即可显示出中文。</p>
+<h2 id="中文乱码问题："><a href="#中文乱码问题：" class="headerlink" title="中文乱码问题："></a>中文乱码问题：</h2><p>mysql的默认默认字符集为latin1，通过\s命令可以查看mysql的字符集，如下：<br><img src="20.png" alt="hive"><br>已经知道是字符集问题后，查看字符集变量名，然后对latin1的字符集进行修改，修改为utf-8<br><img src="21.png" alt="hive"><br><img src="22.png" alt="hive"><br>修改后为：<br><img src="23.png" alt="hive"><br>此时只需要执行导出操作即可显示出中文。</p>
 
     </article>
     <!-- license  -->
@@ -1216,7 +1216,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
         </li>
     
     
@@ -1241,7 +1241,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day5/">装饰器</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href="/2019/05/20/day6/">迭代器</a>
         </li>
     
     
@@ -1272,11 +1272,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="hadoop"><span class="iconfont-archer">&#xe606;</span>hadoop</span>
     
-        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
+        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
     
         <span class="sidebar-tag-name" data-tags="大数据"><span class="iconfont-archer">&#xe606;</span>大数据</span>
     
-        <span class="sidebar-tag-name" data-tags="hive"><span class="iconfont-archer">&#xe606;</span>hive</span>
+        <span class="sidebar-tag-name" data-tags="Hbase"><span class="iconfont-archer">&#xe606;</span>Hbase</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
@@ -1286,11 +1286,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="yarn"><span class="iconfont-archer">&#xe606;</span>yarn</span>
     
-        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
+        <span class="sidebar-tag-name" data-tags="CDH"><span class="iconfont-archer">&#xe606;</span>CDH</span>
     
         <span class="sidebar-tag-name" data-tags="数据仓库"><span class="iconfont-archer">&#xe606;</span>数据仓库</span>
     
-        <span class="sidebar-tag-name" data-tags="CDH"><span class="iconfont-archer">&#xe606;</span>CDH</span>
+        <span class="sidebar-tag-name" data-tags="sqlserver"><span class="iconfont-archer">&#xe606;</span>sqlserver</span>
     
         <span class="sidebar-tag-name" data-tags="HDFS"><span class="iconfont-archer">&#xe606;</span>HDFS</span>
     
